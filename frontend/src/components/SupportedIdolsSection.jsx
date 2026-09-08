@@ -78,6 +78,9 @@ export default function SupportedIdolsSection() {
                 src={artist.img}
                 alt={artist.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onError={(e) => {
+                  e.currentTarget.src = "/assets/grid-1-7yxANZFe.jpg";
+                }}
               />
 
               {/* Bottom Dark Gradient Overlay for High Contrast Text */}
