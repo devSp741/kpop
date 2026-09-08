@@ -31,7 +31,7 @@ const cardVariants = {
 
 export default function FollowArtistsSection() {
   return (
-    <section className="relative py-16 sm:py-24 bg-white text-slate-900 overflow-hidden">
+    <section className="relative py-16 sm:py-24 bg-transparent text-slate-900">
       <div className="max-w-screen-xl px-6 mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Column: Headline & Description */}
