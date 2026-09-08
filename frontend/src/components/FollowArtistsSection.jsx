@@ -34,18 +34,24 @@ export default function FollowArtistsSection() {
     <section className="relative py-16 sm:py-24 bg-white text-slate-900 overflow-hidden">
       <div className="max-w-screen-xl px-6 mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left Column: Headline & Description with Decorative Blob Accent */}
-          <div className="relative">
-            {/* Decorative Green Accent Blob behind text */}
-            <div className="absolute -left-12 -top-10 w-64 h-80 bg-[#00b99a]/15 rounded-full blur-3xl -z-10 pointer-events-none" />
-
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">
+          {/* Left Column: Headline & Description */}
+          <div className="text-left">
+            <p
+              className="text-xs font-semibold uppercase tracking-widest mb-4"
+              style={{ color: "#64748b" }}
+            >
               FOR THE REAL ONES
             </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-6 leading-tight">
+            <h2
+              className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight"
+              style={{ color: "#0f172a" }}
+            >
               Follow the artists you actually care about
             </h2>
-            <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-xl">
+            <p
+              className="text-base sm:text-lg leading-relaxed max-w-xl"
+              style={{ color: "#475569" }}
+            >
               Build your personal radar with any idol, group, or soloist. From BTS to NewJeans, ATEEZ to aespa. We track their activity across every major platform so you get a single, clean timeline of everything they post.
             </p>
           </div>
