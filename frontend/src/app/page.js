@@ -94,18 +94,18 @@ const platformBadges = [
 
 export default function KpopRadarHeroOnlyPage() {
   return (
-    <div className="flex flex-col min-h-screen w-full mx-auto overflow-x-hidden relative bg-background">
-      {/* Background Decorative Shapes */}
+    <div className="flex flex-col min-h-screen w-full mx-auto overflow-x-hidden relative bg-white text-neutral-900">
+      {/* Background Decorative Shapes Layer - Visible on White Background */}
       <div className="absolute top-0 bottom-0 mx-auto left-1/2 transform -translate-x-1/2 z-0 w-full md:w-[1200px] lg:w-[1600px] max-w-screen pointer-events-none">
         <img src={shapesFull} className="hidden lg:block w-full h-full object-cover" alt="" />
         <img src={shapesTablet} className="hidden md:block lg:hidden w-full h-full object-cover" alt="" />
         <img src={shapesMobile} className="md:hidden w-full h-full object-cover" alt="" />
       </div>
 
-      {/* Hero Section Container */}
+      {/* Hero Section Main Content */}
       <main className="relative z-10 flex-grow flex flex-col items-center">
-        {/* Video Area */}
-        <section className="relative w-full min-h-[500px] md:min-h-[560px] lg:min-h-[620px] flex flex-col justify-start pt-16 md:pt-20 px-6 overflow-hidden">
+        {/* Top Video Area */}
+        <section className="relative w-full min-h-[520px] md:min-h-[580px] lg:min-h-[640px] flex flex-col justify-start pt-16 md:pt-24 px-6 overflow-hidden">
           <div className="absolute inset-0 z-0 overflow-hidden">
             <video
               autoPlay
@@ -115,17 +115,17 @@ export default function KpopRadarHeroOnlyPage() {
               className="w-full h-full object-cover"
               src={demoVideo}
             />
-            {/* Dark overlay gradients matching screenshot */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-background/95" />
+            {/* Smooth dark to white gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-white" />
           </div>
 
-          {/* Centered Hero Content */}
+          {/* Centered Hero Headline & Buttons */}
           <div className="relative z-10 max-w-3xl mx-auto text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.15] tracking-tight text-white drop-shadow-md mb-5"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.15] tracking-tight text-white drop-shadow-lg mb-5"
             >
               Keep up with your favorite<br className="hidden sm:block" /> Kpop group in one place
             </motion.h1>
@@ -134,7 +134,7 @@ export default function KpopRadarHeroOnlyPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-base sm:text-lg text-white/90 max-w-2xl mx-auto mb-8 font-normal leading-relaxed drop-shadow"
+              className="text-base sm:text-lg text-white/95 max-w-2xl mx-auto mb-8 font-normal leading-relaxed drop-shadow"
             >
               Instagram, TikTok, Weverse, YouTube, X, Spotify. Your idol posts everywhere. KpopRadar pulls it all into one place so you never miss a comeback, a live, or a random 2am selfie.
             </motion.p>
@@ -147,7 +147,7 @@ export default function KpopRadarHeroOnlyPage() {
             >
               <a
                 href="#"
-                className="rounded-full bg-white px-7 py-3 text-sm sm:text-base font-semibold text-black hover:bg-white/90 transition-all shadow-md"
+                className="rounded-full bg-white px-7 py-3 text-sm sm:text-base font-semibold text-neutral-900 hover:bg-neutral-100 transition-all shadow-md"
               >
                 Get started free
               </a>
@@ -161,32 +161,33 @@ export default function KpopRadarHeroOnlyPage() {
           </div>
         </section>
 
-        {/* Centered Phone Inbox Mockup - Overlapping Video Section */}
+        {/* Centered Phone Inbox Mockup (Solid White Inner Screen - Overlapping Video Section) */}
         <section className="relative z-20 -mt-28 md:-mt-36 sm:px-6 w-full flex flex-col items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="w-[310px] sm:w-[360px] rounded-[2.8rem] border-[7px] border-neutral-900 bg-background shadow-2xl overflow-hidden relative"
+            className="w-[315px] sm:w-[365px] rounded-[2.8rem] border-[8px] border-neutral-900 bg-white shadow-2xl overflow-hidden relative"
           >
-            {/* Notch */}
+            {/* Phone Notch */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[110px] h-[24px] bg-neutral-900 rounded-b-xl z-30" />
 
-            <div className="pt-8 pb-6 px-4 bg-background">
+            {/* Inner Phone Screen - Solid White Background */}
+            <div className="pt-8 pb-6 px-4 bg-white text-neutral-900">
               {/* Status Bar */}
               <div className="flex items-center justify-between px-2 mb-3">
-                <span className="text-[11px] font-semibold text-muted-foreground">9:41</span>
-                <div className="w-4 h-2 rounded-[2px] border border-muted-foreground/50 relative">
-                  <div className="absolute inset-[1px] right-[2px] bg-muted-foreground/70 rounded-[1px]" />
+                <span className="text-[11px] font-semibold text-neutral-500">9:41</span>
+                <div className="w-4 h-2 rounded-[2px] border border-neutral-400 relative">
+                  <div className="absolute inset-[1px] right-[2px] bg-neutral-600 rounded-[1px]" />
                 </div>
               </div>
 
-              {/* Inbox Header */}
+              {/* Inbox Title Header */}
               <div className="mb-3 px-1 text-left">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-0.5">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 mb-0.5">
                   KPOPRADAR
                 </p>
-                <h3 className="text-sm font-bold text-foreground leading-tight">
+                <h3 className="text-sm font-extrabold text-neutral-900 leading-tight">
                   All your platforms,<br />one inbox
                 </h3>
               </div>
@@ -198,33 +199,33 @@ export default function KpopRadarHeroOnlyPage() {
                   return (
                     <div
                       key={idx}
-                      className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
+                      className="w-6 h-6 rounded-md flex items-center justify-center shrink-0 shadow-sm"
                       style={{ backgroundColor: badge.color }}
                     >
-                      <IconComp className="w-3 h-3 text-white" />
+                      <IconComp className="w-3.5 h-3.5 text-white" />
                     </div>
                   );
                 })}
                 <div className="flex items-center gap-1 ml-0.5">
-                  <svg width="18" height="10" viewBox="0 0 22 12" fill="none" className="text-muted-foreground/60">
+                  <svg width="18" height="10" viewBox="0 0 22 12" fill="none" className="text-neutral-400">
                     <path d="M1 6H18M18 6L13 1M18 6L13 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <div className="w-6 h-6 rounded-md bg-foreground flex items-center justify-center">
-                    <LogoMark className="w-3 h-3 text-background" />
+                  <div className="w-6 h-6 rounded-md bg-neutral-900 flex items-center justify-center shadow-sm">
+                    <LogoMark className="w-3.5 h-3.5 text-white" />
                   </div>
                 </div>
               </div>
 
-              <div className="h-px bg-border/50 mb-2.5 mx-1" />
+              <div className="h-px bg-neutral-200 mb-2.5 mx-1" />
 
-              {/* Notification Cards Feed */}
+              {/* Notification Feed Items (Solid Light Cards on White Screen) */}
               <div className="space-y-1.5 text-left">
                 {notificationFeed.map((item, idx) => {
                   const IconComp = item.icon;
                   return (
                     <div
                       key={idx}
-                      className="flex items-center gap-2.5 p-2 rounded-xl bg-secondary/50 border border-border/30"
+                      className="flex items-center gap-2.5 p-2 rounded-xl bg-neutral-50 border border-neutral-200/80 shadow-sm"
                     >
                       <div
                         className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
@@ -234,10 +235,10 @@ export default function KpopRadarHeroOnlyPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-1.5">
-                          <span className="text-[11px] font-bold text-foreground">{item.platform}</span>
-                          <span className="text-[9px] text-muted-foreground shrink-0">{item.time}</span>
+                          <span className="text-[11px] font-bold text-neutral-900">{item.platform}</span>
+                          <span className="text-[9px] text-neutral-400 shrink-0">{item.time}</span>
                         </div>
-                        <p className="text-[10px] text-muted-foreground truncate">{item.body}</p>
+                        <p className="text-[10px] text-neutral-600 truncate">{item.body}</p>
                       </div>
                     </div>
                   );
@@ -246,12 +247,12 @@ export default function KpopRadarHeroOnlyPage() {
             </div>
           </motion.div>
 
-          {/* Platform Logos Row Below Phone Mockup */}
+          {/* Platform Logos Row Below Phone Mockup (On White Background) */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex items-center justify-center gap-6 sm:gap-8 mt-10 mb-16"
+            className="flex items-center justify-center gap-6 sm:gap-8 mt-10 mb-16 relative z-10"
           >
             <InstagramIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
             <TikTokIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
