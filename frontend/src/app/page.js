@@ -27,7 +27,7 @@ const InstagramIcon = ({ className = "w-5 h-5", colored = false }) => (
     {colored ? (
       <>
         <defs>
-          <linearGradient id="ig-gradient-hero-v2" x1="0%" y1="100%" x2="100%" y2="0%">
+          <linearGradient id="ig-gradient-hero-v3" x1="0%" y1="100%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#FFDC80" />
             <stop offset="25%" stopColor="#F77737" />
             <stop offset="50%" stopColor="#E1306C" />
@@ -36,7 +36,7 @@ const InstagramIcon = ({ className = "w-5 h-5", colored = false }) => (
           </linearGradient>
         </defs>
         <path
-          fill="url(#ig-gradient-hero-v2)"
+          fill="url(#ig-gradient-hero-v3)"
           d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"
         />
       </>
@@ -105,7 +105,7 @@ export default function KpopRadarHeroOnlyPage() {
       {/* Hero Section Main Content */}
       <main className="relative z-10 flex-grow flex flex-col items-center">
         {/* Top Video Area */}
-        <section className="relative w-full min-h-[560px] sm:min-h-[600px] md:min-h-[660px] lg:min-h-[720px] flex flex-col justify-start pt-16 sm:pt-20 md:pt-28 px-6 overflow-hidden">
+        <section className="relative w-full min-h-[520px] md:min-h-[580px] lg:min-h-[640px] flex flex-col justify-start pt-16 md:pt-20 px-6 overflow-hidden">
           <div className="absolute inset-0 z-0 overflow-hidden">
             <video
               autoPlay
@@ -115,26 +115,26 @@ export default function KpopRadarHeroOnlyPage() {
               className="w-full h-full object-cover"
               src={demoVideo}
             />
-            {/* Smooth gradient transition into white background */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-white" />
+            {/* Smooth dark to white gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-white" />
           </div>
 
-          {/* Centered Hero Headline & Buttons - Exact Proportions & Scale */}
-          <div className="relative z-10 max-w-4xl mx-auto text-center">
+          {/* Centered Hero Headline & Buttons - Exact Lovable App Specs */}
+          <div className="relative z-10 max-w-2xl mx-auto text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-xl mb-6"
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="text-4xl font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-lg md:text-6xl mb-6"
             >
-              Keep up with your favorite<br className="hidden sm:block" /> Kpop group in one place
+              Keep up with your favorite Kpop group in one place
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-base sm:text-lg md:text-xl text-white/95 max-w-2xl mx-auto mb-8 sm:mb-10 font-normal leading-relaxed drop-shadow-md"
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+              className="mt-4 text-lg md:text-xl font-normal text-white/80 md:max-w-xl md:mx-auto mb-8 md:mb-12 drop-shadow"
             >
               Instagram, TikTok, Weverse, YouTube, X, Spotify. Your idol posts everywhere. KpopRadar pulls it all into one place so you never miss a comeback, a live, or a random 2am selfie.
             </motion.p>
@@ -142,18 +142,18 @@ export default function KpopRadarHeroOnlyPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="flex flex-row gap-4 justify-center items-center mb-10"
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10"
             >
               <a
                 href="#"
-                className="rounded-full bg-white px-8 py-3.5 text-base sm:text-lg font-semibold text-slate-900 hover:bg-neutral-100 transition-all shadow-lg"
+                className="inline-block rounded-full bg-white px-8 py-3.5 text-base font-semibold text-slate-900 hover:opacity-90 transition-opacity shadow-md"
               >
                 Get started free
               </a>
               <a
                 href="#"
-                className="rounded-full bg-white/10 backdrop-blur-md border border-white/40 px-8 py-3.5 text-base sm:text-lg font-semibold text-white hover:bg-white/20 transition-all"
+                className="inline-block rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-8 py-3.5 text-base font-semibold text-white hover:bg-white/20 transition-all"
               >
                 See how it works
               </a>
@@ -161,34 +161,44 @@ export default function KpopRadarHeroOnlyPage() {
           </div>
         </section>
 
-        {/* Centered Phone Inbox Mockup - Explicit Slate Colors for 100% Visibility */}
+        {/* Centered Phone Inbox Mockup - Exact 1:1 Lovable Component Specs */}
         <section className="relative z-20 -mt-28 md:-mt-36 sm:px-6 w-full flex flex-col items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="w-[330px] sm:w-[370px] rounded-[3rem] border-[8px] border-slate-900 bg-white shadow-2xl overflow-hidden relative"
+            className="relative mx-auto w-[320px] sm:w-[360px]"
           >
-            {/* Phone Notch */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[26px] bg-slate-900 rounded-b-2xl z-30" />
+            <div className="relative rounded-[3rem] border-[8px] border-slate-900 bg-white shadow-2xl overflow-hidden">
+              {/* Phone Notch */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[28px] bg-slate-900 rounded-b-2xl z-20" />
 
-            {/* Inner Phone Screen - Solid White Background & Explicit Slate Colors */}
-            <div className="pt-10 pb-8 px-4 bg-white text-slate-900 min-h-[580px] flex flex-col justify-between">
-              <div>
+              {/* Inner Phone Screen - Solid White Background & Exact Slate Text Colors */}
+              <div className="pt-10 pb-8 px-4 min-h-[600px] bg-white text-slate-900">
                 {/* Status Bar */}
                 <div className="flex items-center justify-between px-2 mb-4">
-                  <span className="text-xs font-semibold text-slate-500">9:41</span>
-                  <div className="w-4 h-2.5 rounded-sm border border-slate-400 relative">
-                    <div className="absolute inset-[1px] right-[2px] bg-slate-600 rounded-[1px]" />
+                  <span className="text-xs font-semibold text-slate-500" style={{ color: "#64748b" }}>
+                    9:41
+                  </span>
+                  <div className="flex gap-1.5 items-center">
+                    <div className="w-4 h-2.5 rounded-sm border border-slate-400 relative">
+                      <div className="absolute inset-[1px] right-[2px] bg-slate-600 rounded-[1px]" />
+                    </div>
                   </div>
                 </div>
 
-                {/* Inbox Title Header - FORCED DARK SLATE TEXT FOR 100% VISIBILITY */}
+                {/* Inbox Title Header - Exact Exact Styling */}
                 <div className="mb-4 px-1 text-left">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-1">
-                    KPOPRADAR
+                  <p
+                    className="text-xs font-semibold uppercase tracking-widest mb-1"
+                    style={{ color: "#64748b" }}
+                  >
+                    KpopRadar
                   </p>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
+                  <h3
+                    className="text-base font-bold leading-tight"
+                    style={{ color: "#0f172a" }}
+                  >
                     All your platforms,<br />one inbox
                   </h3>
                 </div>
@@ -198,20 +208,24 @@ export default function KpopRadarHeroOnlyPage() {
                   {platformBadges.map((badge, idx) => {
                     const IconComp = badge.icon;
                     return (
-                      <div
+                      <motion.div
                         key={idx}
-                        className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 shadow-sm"
+                        initial={{ opacity: 0, scale: 0.7 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: idx * 0.07, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                        className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
                         style={{ backgroundColor: badge.color }}
                       >
                         <IconComp className="w-3.5 h-3.5 text-white" />
-                      </div>
+                      </motion.div>
                     );
                   })}
                   <div className="flex items-center gap-1 ml-1">
                     <svg width="22" height="12" viewBox="0 0 22 12" fill="none" className="text-slate-400">
                       <path d="M1 6H18M18 6L13 1M18 6L13 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                    <div className="w-7 h-7 rounded-lg bg-slate-900 flex items-center justify-center shadow-sm">
+                    <div className="w-7 h-7 rounded-lg bg-slate-900 flex items-center justify-center">
                       <LogoMark className="w-3.5 h-3.5 text-white" />
                     </div>
                   </div>
@@ -229,17 +243,23 @@ export default function KpopRadarHeroOnlyPage() {
                         className="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 shadow-xs"
                       >
                         <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-sm"
+                          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                           style={{ backgroundColor: item.color }}
                         >
                           <IconComp className="w-3.5 h-3.5 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-2">
-                            <span className="text-[11px] font-semibold text-slate-900">{item.platform}</span>
-                            <span className="text-[10px] text-slate-400 shrink-0">{item.time}</span>
+                            <span className="text-[11px] font-semibold" style={{ color: "#0f172a" }}>
+                              {item.platform}
+                            </span>
+                            <span className="text-[10px] shrink-0" style={{ color: "#94a3b8" }}>
+                              {item.time}
+                            </span>
                           </div>
-                          <p className="text-[11px] text-slate-600 mt-0.5 truncate">{item.body}</p>
+                          <p className="text-[11px] mt-0.5 truncate" style={{ color: "#64748b" }}>
+                            {item.body}
+                          </p>
                         </div>
                       </div>
                     );
@@ -247,6 +267,8 @@ export default function KpopRadarHeroOnlyPage() {
                 </div>
               </div>
             </div>
+
+            <div className="absolute -inset-8 bg-gradient-to-b from-slate-900/5 via-slate-900/3 to-transparent rounded-[4rem] blur-2xl -z-10" />
           </motion.div>
 
           {/* Platform Logos Row Below Phone Mockup */}
@@ -254,14 +276,14 @@ export default function KpopRadarHeroOnlyPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex items-center justify-center gap-6 sm:gap-8 mt-12 mb-16 relative z-10"
+            className="flex items-center justify-center gap-6 sm:gap-8 mt-10 mb-16 relative z-10"
           >
-            <InstagramIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
-            <TikTokIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
-            <YouTubeIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
-            <WeverseIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
-            <XIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
-            <SpotifyIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
+            <InstagramIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
+            <TikTokIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
+            <YouTubeIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
+            <WeverseIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
+            <XIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
+            <SpotifyIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
           </motion.div>
         </section>
       </main>
