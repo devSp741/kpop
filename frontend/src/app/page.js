@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import FollowArtistsSection from "@/components/FollowArtistsSection";
 
@@ -146,18 +147,18 @@ export default function KpopRadarLandingPage() {
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
               className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-8 sm:mb-10 w-full max-w-[280px] sm:max-w-none mx-auto"
             >
-              <a
+              <Link
                 href="#"
                 className="w-full sm:w-auto text-center rounded-full bg-white px-7 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold text-slate-900 hover:opacity-90 transition-opacity shadow-md"
               >
                 Get started free
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="w-full sm:w-auto text-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-7 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold text-white hover:bg-white/20 transition-all"
               >
                 See how it works
-              </a>
+              </Link>
             </motion.div>
           </div>
         </section>
