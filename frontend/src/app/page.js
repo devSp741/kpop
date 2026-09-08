@@ -198,8 +198,8 @@ export default function KpopRadarLandingPage() {
                     KpopRadar
                   </p>
                   <h3
-                    className="text-[13px] sm:text-[14px] font-bold leading-snug"
-                    style={{ color: "#0f172a" }}
+                    className="font-bold leading-snug"
+                    style={{ color: "#0f172a", fontSize: "clamp(1.35rem, 1.5vw, 1.75rem)" }}
                   >
                     All your platforms,<br />one inbox
                   </h3>
