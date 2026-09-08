@@ -189,15 +189,15 @@ export default function KpopRadarLandingPage() {
                 </div>
 
                 {/* Inbox Title Header */}
-                <div className="mb-3 sm:mb-4 px-1 text-left">
+                <div className="mb-2.5 sm:mb-3 px-1 text-left">
                   <p
-                    className="text-xs font-semibold uppercase tracking-widest mb-1"
+                    className="text-[10px] font-bold uppercase tracking-widest mb-0.5"
                     style={{ color: "#64748b" }}
                   >
                     KpopRadar
                   </p>
                   <h3
-                    className="text-base font-bold leading-tight"
+                    className="text-[13px] sm:text-[14px] font-bold leading-snug"
                     style={{ color: "#0f172a" }}
                   >
                     All your platforms,<br />one inbox
