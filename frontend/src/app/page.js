@@ -27,7 +27,7 @@ const InstagramIcon = ({ className = "w-5 h-5", colored = false }) => (
     {colored ? (
       <>
         <defs>
-          <linearGradient id="ig-gradient-hero" x1="0%" y1="100%" x2="100%" y2="0%">
+          <linearGradient id="ig-gradient-hero-v2" x1="0%" y1="100%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#FFDC80" />
             <stop offset="25%" stopColor="#F77737" />
             <stop offset="50%" stopColor="#E1306C" />
@@ -36,7 +36,7 @@ const InstagramIcon = ({ className = "w-5 h-5", colored = false }) => (
           </linearGradient>
         </defs>
         <path
-          fill="url(#ig-gradient-hero)"
+          fill="url(#ig-gradient-hero-v2)"
           d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"
         />
       </>
@@ -75,27 +75,27 @@ const LogoMark = ({ className = "w-6 h-6" }) => (
 );
 
 const notificationFeed = [
-  { platform: "YouTube", icon: YouTubeIcon, color: "#FF0000", body: "JIMIN posted: 'Who' Official MV", time: "Just now" },
-  { platform: "Instagram", icon: InstagramIcon, color: "#E1306C", body: "V shared a new story", time: "2m ago" },
+  { platform: "YouTube", icon: YouTubeIcon, color: "hsl(0 72% 51%)", body: "JIMIN posted: 'Who' Official MV", time: "Just now" },
+  { platform: "Instagram", icon: InstagramIcon, color: "hsl(330 80% 55%)", body: "V shared a new story", time: "2m ago" },
   { platform: "TikTok", icon: TikTokIcon, color: "#000000", body: "Stray Kids posted a dance challenge", time: "5m ago" },
-  { platform: "Spotify", icon: SpotifyIcon, color: "#1DB954", body: "BLACKPINK dropped 'Pink Venom' remix", time: "12m ago" },
-  { platform: "Weverse", icon: WeverseIcon, color: "#0FCEA6", body: "Jungkook is live now!", time: "18m ago" },
-  { platform: "X", icon: XIcon, color: "#000000", body: "aespa retweeted a fan post", time: "24m ago" }
+  { platform: "Spotify", icon: SpotifyIcon, color: "hsl(141 73% 42%)", body: "BLACKPINK dropped 'Pink Venom' remix", time: "12m ago" },
+  { platform: "Weverse", icon: WeverseIcon, color: "hsl(160 60% 45%)", body: "Jungkook is live now!", time: "18m ago" },
+  { platform: "X", icon: XIcon, color: "hsl(0 0% 10%)", body: "aespa retweeted a fan post", time: "24m ago" }
 ];
 
 const platformBadges = [
-  { icon: YouTubeIcon, color: "#FF0000" },
-  { icon: InstagramIcon, color: "#E1306C" },
+  { icon: YouTubeIcon, color: "hsl(0 72% 51%)" },
+  { icon: InstagramIcon, color: "hsl(330 80% 55%)" },
   { icon: TikTokIcon, color: "#000000" },
-  { icon: SpotifyIcon, color: "#1DB954" },
-  { icon: WeverseIcon, color: "#0FCEA6" },
-  { icon: XIcon, color: "#000000" }
+  { icon: SpotifyIcon, color: "hsl(141 73% 42%)" },
+  { icon: WeverseIcon, color: "hsl(160 60% 45%)" },
+  { icon: XIcon, color: "hsl(0 0% 10%)" }
 ];
 
 export default function KpopRadarHeroOnlyPage() {
   return (
-    <div className="flex flex-col min-h-screen w-full mx-auto overflow-x-hidden relative bg-white text-neutral-900">
-      {/* Background Decorative Shapes Layer - Visible on White Background */}
+    <div className="flex flex-col min-h-screen w-full mx-auto overflow-x-hidden relative bg-white text-slate-900">
+      {/* Background Decorative Shapes Layer */}
       <div className="absolute top-0 bottom-0 mx-auto left-1/2 transform -translate-x-1/2 z-0 w-full md:w-[1200px] lg:w-[1600px] max-w-screen pointer-events-none">
         <img src={shapesFull} className="hidden lg:block w-full h-full object-cover" alt="" />
         <img src={shapesTablet} className="hidden md:block lg:hidden w-full h-full object-cover" alt="" />
@@ -105,7 +105,7 @@ export default function KpopRadarHeroOnlyPage() {
       {/* Hero Section Main Content */}
       <main className="relative z-10 flex-grow flex flex-col items-center">
         {/* Top Video Area */}
-        <section className="relative w-full min-h-[520px] md:min-h-[580px] lg:min-h-[640px] flex flex-col justify-start pt-16 md:pt-24 px-6 overflow-hidden">
+        <section className="relative w-full min-h-[560px] sm:min-h-[600px] md:min-h-[660px] lg:min-h-[720px] flex flex-col justify-start pt-16 sm:pt-20 md:pt-28 px-6 overflow-hidden">
           <div className="absolute inset-0 z-0 overflow-hidden">
             <video
               autoPlay
@@ -115,17 +115,17 @@ export default function KpopRadarHeroOnlyPage() {
               className="w-full h-full object-cover"
               src={demoVideo}
             />
-            {/* Smooth dark to white gradient overlay */}
+            {/* Smooth gradient transition into white background */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-white" />
           </div>
 
-          {/* Centered Hero Headline & Buttons */}
-          <div className="relative z-10 max-w-3xl mx-auto text-center">
+          {/* Centered Hero Headline & Buttons - Exact Proportions & Scale */}
+          <div className="relative z-10 max-w-4xl mx-auto text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.15] tracking-tight text-white drop-shadow-lg mb-5"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-xl mb-6"
             >
               Keep up with your favorite<br className="hidden sm:block" /> Kpop group in one place
             </motion.h1>
@@ -134,7 +134,7 @@ export default function KpopRadarHeroOnlyPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-base sm:text-lg text-white/95 max-w-2xl mx-auto mb-8 font-normal leading-relaxed drop-shadow"
+              className="text-base sm:text-lg md:text-xl text-white/95 max-w-2xl mx-auto mb-8 sm:mb-10 font-normal leading-relaxed drop-shadow-md"
             >
               Instagram, TikTok, Weverse, YouTube, X, Spotify. Your idol posts everywhere. KpopRadar pulls it all into one place so you never miss a comeback, a live, or a random 2am selfie.
             </motion.p>
@@ -147,13 +147,13 @@ export default function KpopRadarHeroOnlyPage() {
             >
               <a
                 href="#"
-                className="rounded-full bg-white px-7 py-3 text-sm sm:text-base font-semibold text-neutral-900 hover:bg-neutral-100 transition-all shadow-md"
+                className="rounded-full bg-white px-8 py-3.5 text-base sm:text-lg font-semibold text-slate-900 hover:bg-neutral-100 transition-all shadow-lg"
               >
                 Get started free
               </a>
               <a
                 href="#"
-                className="rounded-full bg-white/10 backdrop-blur-md border border-white/40 px-7 py-3 text-sm sm:text-base font-semibold text-white hover:bg-white/20 transition-all"
+                className="rounded-full bg-white/10 backdrop-blur-md border border-white/40 px-8 py-3.5 text-base sm:text-lg font-semibold text-white hover:bg-white/20 transition-all"
               >
                 See how it works
               </a>
@@ -161,105 +161,107 @@ export default function KpopRadarHeroOnlyPage() {
           </div>
         </section>
 
-        {/* Centered Phone Inbox Mockup (Solid White Inner Screen - Overlapping Video Section) */}
+        {/* Centered Phone Inbox Mockup - Explicit Slate Colors for 100% Visibility */}
         <section className="relative z-20 -mt-28 md:-mt-36 sm:px-6 w-full flex flex-col items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="w-[315px] sm:w-[365px] rounded-[2.8rem] border-[8px] border-neutral-900 bg-white shadow-2xl overflow-hidden relative"
+            className="w-[330px] sm:w-[370px] rounded-[3rem] border-[8px] border-slate-900 bg-white shadow-2xl overflow-hidden relative"
           >
             {/* Phone Notch */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[110px] h-[24px] bg-neutral-900 rounded-b-xl z-30" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[26px] bg-slate-900 rounded-b-2xl z-30" />
 
-            {/* Inner Phone Screen - Solid White Background */}
-            <div className="pt-8 pb-6 px-4 bg-white text-neutral-900">
-              {/* Status Bar */}
-              <div className="flex items-center justify-between px-2 mb-3">
-                <span className="text-[11px] font-semibold text-neutral-500">9:41</span>
-                <div className="w-4 h-2 rounded-[2px] border border-neutral-400 relative">
-                  <div className="absolute inset-[1px] right-[2px] bg-neutral-600 rounded-[1px]" />
-                </div>
-              </div>
-
-              {/* Inbox Title Header */}
-              <div className="mb-3 px-1 text-left">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 mb-0.5">
-                  KPOPRADAR
-                </p>
-                <h3 className="text-sm font-extrabold text-neutral-900 leading-tight">
-                  All your platforms,<br />one inbox
-                </h3>
-              </div>
-
-              {/* Platform Badges Row */}
-              <div className="flex items-center gap-1.5 mb-3 flex-wrap">
-                {platformBadges.map((badge, idx) => {
-                  const IconComp = badge.icon;
-                  return (
-                    <div
-                      key={idx}
-                      className="w-6 h-6 rounded-md flex items-center justify-center shrink-0 shadow-sm"
-                      style={{ backgroundColor: badge.color }}
-                    >
-                      <IconComp className="w-3.5 h-3.5 text-white" />
-                    </div>
-                  );
-                })}
-                <div className="flex items-center gap-1 ml-0.5">
-                  <svg width="18" height="10" viewBox="0 0 22 12" fill="none" className="text-neutral-400">
-                    <path d="M1 6H18M18 6L13 1M18 6L13 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <div className="w-6 h-6 rounded-md bg-neutral-900 flex items-center justify-center shadow-sm">
-                    <LogoMark className="w-3.5 h-3.5 text-white" />
+            {/* Inner Phone Screen - Solid White Background & Explicit Slate Colors */}
+            <div className="pt-10 pb-8 px-4 bg-white text-slate-900 min-h-[580px] flex flex-col justify-between">
+              <div>
+                {/* Status Bar */}
+                <div className="flex items-center justify-between px-2 mb-4">
+                  <span className="text-xs font-semibold text-slate-500">9:41</span>
+                  <div className="w-4 h-2.5 rounded-sm border border-slate-400 relative">
+                    <div className="absolute inset-[1px] right-[2px] bg-slate-600 rounded-[1px]" />
                   </div>
                 </div>
-              </div>
 
-              <div className="h-px bg-neutral-200 mb-2.5 mx-1" />
+                {/* Inbox Title Header - FORCED DARK SLATE TEXT FOR 100% VISIBILITY */}
+                <div className="mb-4 px-1 text-left">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-1">
+                    KPOPRADAR
+                  </p>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
+                    All your platforms,<br />one inbox
+                  </h3>
+                </div>
 
-              {/* Notification Feed Items (Solid Light Cards on White Screen) */}
-              <div className="space-y-1.5 text-left">
-                {notificationFeed.map((item, idx) => {
-                  const IconComp = item.icon;
-                  return (
-                    <div
-                      key={idx}
-                      className="flex items-center gap-2.5 p-2 rounded-xl bg-neutral-50 border border-neutral-200/80 shadow-sm"
-                    >
+                {/* Platform Badges Row */}
+                <div className="flex items-center gap-1.5 mb-4 flex-wrap">
+                  {platformBadges.map((badge, idx) => {
+                    const IconComp = badge.icon;
+                    return (
                       <div
-                        className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: item.color }}
+                        key={idx}
+                        className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 shadow-sm"
+                        style={{ backgroundColor: badge.color }}
                       >
                         <IconComp className="w-3.5 h-3.5 text-white" />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-1.5">
-                          <span className="text-[11px] font-bold text-neutral-900">{item.platform}</span>
-                          <span className="text-[9px] text-neutral-400 shrink-0">{item.time}</span>
-                        </div>
-                        <p className="text-[10px] text-neutral-600 truncate">{item.body}</p>
-                      </div>
+                    );
+                  })}
+                  <div className="flex items-center gap-1 ml-1">
+                    <svg width="22" height="12" viewBox="0 0 22 12" fill="none" className="text-slate-400">
+                      <path d="M1 6H18M18 6L13 1M18 6L13 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <div className="w-7 h-7 rounded-lg bg-slate-900 flex items-center justify-center shadow-sm">
+                      <LogoMark className="w-3.5 h-3.5 text-white" />
                     </div>
-                  );
-                })}
+                  </div>
+                </div>
+
+                <div className="h-px bg-slate-200 mb-3 mx-1" />
+
+                {/* Notification Feed Cards */}
+                <div className="space-y-2 text-left">
+                  {notificationFeed.map((item, idx) => {
+                    const IconComp = item.icon;
+                    return (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 shadow-xs"
+                      >
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-sm"
+                          style={{ backgroundColor: item.color }}
+                        >
+                          <IconComp className="w-3.5 h-3.5 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-[11px] font-semibold text-slate-900">{item.platform}</span>
+                            <span className="text-[10px] text-slate-400 shrink-0">{item.time}</span>
+                          </div>
+                          <p className="text-[11px] text-slate-600 mt-0.5 truncate">{item.body}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Platform Logos Row Below Phone Mockup (On White Background) */}
+          {/* Platform Logos Row Below Phone Mockup */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex items-center justify-center gap-6 sm:gap-8 mt-10 mb-16 relative z-10"
+            className="flex items-center justify-center gap-6 sm:gap-8 mt-12 mb-16 relative z-10"
           >
-            <InstagramIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
-            <TikTokIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
-            <YouTubeIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
-            <WeverseIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
-            <XIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
-            <SpotifyIcon className="w-7 h-7 hover:scale-110 transition-transform cursor-pointer" colored />
+            <InstagramIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
+            <TikTokIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
+            <YouTubeIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
+            <WeverseIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
+            <XIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
+            <SpotifyIcon className="w-8 h-8 hover:scale-110 transition-transform cursor-pointer" colored />
           </motion.div>
         </section>
       </main>
