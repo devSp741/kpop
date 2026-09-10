@@ -1,0 +1,362 @@
+[
+  {
+    "id": 1,
+    "slug": "bts",
+    "name": "BTS",
+    "type": "GROUP",
+    "parentArtistId": null,
+    "groupName": null,
+    "avatar": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "75.4M",
+    "officialHandles": {
+      "youtube": { "handle": "@BTS", "url": "https://www.youtube.com/@BTS" },
+      "instagram": { "handle": "@bts.bighitofficial", "url": "https://www.instagram.com/bts.bighitofficial/" },
+      "tiktok": { "handle": "@bts_official_bighit", "url": "https://www.tiktok.com/@bts_official_bighit" },
+      "spotify": { "handle": "BTS", "url": "https://open.spotify.com/artist/3NrfEzSpTawL2avHd9YyMo" },
+      "weverse": { "handle": "BTS Community", "url": "https://weverse.io/bts" },
+      "twitter": { "handle": "@bts_bighit", "url": "https://x.com/bts_bighit" }
+    }
+  },
+  {
+    "id": 2,
+    "slug": "blackpink",
+    "name": "BLACKPINK",
+    "type": "GROUP",
+    "parentArtistId": null,
+    "groupName": null,
+    "avatar": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "58.2M",
+    "officialHandles": {
+      "youtube": { "handle": "@BLACKPINK", "url": "https://www.youtube.com/@BLACKPINK" },
+      "instagram": { "handle": "@blackpinkofficial", "url": "https://www.instagram.com/blackpinkofficial/" },
+      "tiktok": { "handle": "@bp_tiktok", "url": "https://www.tiktok.com/@bp_tiktok" },
+      "spotify": { "handle": "BLACKPINK", "url": "https://open.spotify.com/artist/41MozSoPIED1dJM0wP9Dwq" },
+      "weverse": { "handle": "BLACKPINK Community", "url": "https://weverse.io/blackpink" },
+      "twitter": { "handle": "@BLACKPINK", "url": "https://x.com/BLACKPINK" }
+    }
+  },
+  {
+    "id": 3,
+    "slug": "twice",
+    "name": "TWICE",
+    "type": "GROUP",
+    "parentArtistId": null,
+    "groupName": null,
+    "avatar": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "29.8M",
+    "officialHandles": {
+      "youtube": { "handle": "@TWICE", "url": "https://www.youtube.com/@TWICE" },
+      "instagram": { "handle": "@twicetagram", "url": "https://www.instagram.com/twicetagram/" },
+      "tiktok": { "handle": "@twice_tiktok_official", "url": "https://www.tiktok.com/@twice_tiktok_official" },
+      "spotify": { "handle": "TWICE", "url": "https://open.spotify.com/artist/7n2Ycct7BejGDj7meEvuLB" },
+      "weverse": { "handle": "TWICE Community", "url": "https://weverse.io/twice" },
+      "twitter": { "handle": "@JYPETWICE", "url": "https://x.com/JYPETWICE" }
+    }
+  },
+  {
+    "id": 4,
+    "slug": "stray-kids",
+    "name": "Stray Kids",
+    "type": "GROUP",
+    "parentArtistId": null,
+    "groupName": null,
+    "avatar": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "31.5M",
+    "officialHandles": {
+      "youtube": { "handle": "@StrayKids", "url": "https://www.youtube.com/@StrayKids" },
+      "instagram": { "handle": "@realstraykids", "url": "https://www.instagram.com/realstraykids/" },
+      "tiktok": { "handle": "@jypestraykids", "url": "https://www.tiktok.com/@jypestraykids" },
+      "spotify": { "handle": "Stray Kids", "url": "https://open.spotify.com/artist/2DaxEImWMRQLzGZ2y542x4" },
+      "weverse": { "handle": "Stray Kids Community", "url": "https://weverse.io/straykids" },
+      "twitter": { "handle": "@Stray_Kids", "url": "https://x.com/Stray_Kids" }
+    }
+  },
+  {
+    "id": 5,
+    "slug": "newjeans",
+    "name": "NewJeans",
+    "type": "GROUP",
+    "parentArtistId": null,
+    "groupName": null,
+    "avatar": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "14.2M",
+    "officialHandles": {
+      "youtube": { "handle": "@NewJeans_official", "url": "https://www.youtube.com/@NewJeans_official" },
+      "instagram": { "handle": "@newjeans_official", "url": "https://www.instagram.com/newjeans_official/" },
+      "tiktok": { "handle": "@newjeans_official", "url": "https://www.tiktok.com/@newjeans_official" },
+      "spotify": { "handle": "NewJeans", "url": "https://open.spotify.com/artist/6HvZYsbFfjnjFrWF950C9d" },
+      "weverse": { "handle": "NewJeans Community", "url": "https://weverse.io/newjeans" },
+      "twitter": { "handle": "@NewJeans_ADOR", "url": "https://x.com/NewJeans_ADOR" }
+    }
+  },
+  {
+    "id": 6,
+    "slug": "seventeen",
+    "name": "SEVENTEEN",
+    "type": "GROUP",
+    "parentArtistId": null,
+    "groupName": null,
+    "avatar": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "16.8M",
+    "officialHandles": {
+      "youtube": { "handle": "@pledis17", "url": "https://www.youtube.com/@pledis17" },
+      "instagram": { "handle": "@saythename_17", "url": "https://www.instagram.com/saythename_17/" },
+      "tiktok": { "handle": "@seventeen17_official", "url": "https://www.tiktok.com/@seventeen17_official" },
+      "spotify": { "handle": "SEVENTEEN", "url": "https://open.spotify.com/artist/711MCceyCBcFnzjGYxyHQn" },
+      "weverse": { "handle": "SEVENTEEN Community", "url": "https://weverse.io/seventeen" },
+      "twitter": { "handle": "@pledis_17", "url": "https://x.com/pledis_17" }
+    }
+  },
+  {
+    "id": 7,
+    "slug": "exo",
+    "name": "EXO",
+    "type": "GROUP",
+    "parentArtistId": null,
+    "groupName": null,
+    "avatar": "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "20.1M",
+    "officialHandles": {
+      "youtube": { "handle": "@EXO", "url": "https://www.youtube.com/@EXO" },
+      "instagram": { "handle": "@weareone.exo", "url": "https://www.instagram.com/weareone.exo/" },
+      "tiktok": { "handle": "@weareone.exo_official", "url": "https://www.tiktok.com/@weareone.exo_official" },
+      "spotify": { "handle": "EXO", "url": "https://open.spotify.com/artist/3weu01-c8nO9sY4vS5Fk4z" },
+      "weverse": { "handle": "EXO Community", "url": "https://weverse.io/exo" },
+      "twitter": { "handle": "@weareoneEXO", "url": "https://x.com/weareoneEXO" }
+    }
+  },
+  {
+    "id": 8,
+    "slug": "aespa",
+    "name": "aespa",
+    "type": "GROUP",
+    "parentArtistId": null,
+    "groupName": null,
+    "avatar": "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "12.9M",
+    "officialHandles": {
+      "youtube": { "handle": "@aespa", "url": "https://www.youtube.com/@aespa" },
+      "instagram": { "handle": "@aespa_official", "url": "https://www.instagram.com/aespa_official/" },
+      "tiktok": { "handle": "@aespa_official", "url": "https://www.tiktok.com/@aespa_official" },
+      "spotify": { "handle": "aespa", "url": "https://open.spotify.com/artist/6rE8039n55799n8V8" },
+      "weverse": { "handle": "aespa Community", "url": "https://weverse.io/aespa" },
+      "twitter": { "handle": "@aespa_official", "url": "https://x.com/aespa_official" }
+    }
+  },
+  {
+    "id": 9,
+    "slug": "enhypen",
+    "name": "ENHYPEN",
+    "type": "GROUP",
+    "parentArtistId": null,
+    "groupName": null,
+    "avatar": "https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "15.7M",
+    "officialHandles": {
+      "youtube": { "handle": "@ENHYPENOFFICIAL", "url": "https://www.youtube.com/@ENHYPENOFFICIAL" },
+      "instagram": { "handle": "@enhypen", "url": "https://www.instagram.com/enhypen/" },
+      "tiktok": { "handle": "@enhypen", "url": "https://www.tiktok.com/@enhypen" },
+      "spotify": { "handle": "ENHYPEN", "url": "https://open.spotify.com/artist/5edxV7B1g0x5B" },
+      "weverse": { "handle": "ENHYPEN Community", "url": "https://weverse.io/enhypen" },
+      "twitter": { "handle": "@ENHYPEN", "url": "https://x.com/ENHYPEN" }
+    }
+  },
+  {
+    "id": 10,
+    "slug": "le-sserafim",
+    "name": "LE SSERAFIM",
+    "type": "GROUP",
+    "parentArtistId": null,
+    "groupName": null,
+    "avatar": "https://images.unsplash.com/photo-1469488865564-c2de10f69f96?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "10.4M",
+    "officialHandles": {
+      "youtube": { "handle": "@LESSERAFIM_official", "url": "https://www.youtube.com/@LESSERAFIM_official" },
+      "instagram": { "handle": "@le_sserafim", "url": "https://www.instagram.com/le_sserafim/" },
+      "tiktok": { "handle": "@le_sserafim", "url": "https://www.tiktok.com/@le_sserafim" },
+      "spotify": { "handle": "LE SSERAFIM", "url": "https://open.spotify.com/artist/4SpL35N84W654" },
+      "weverse": { "handle": "LE SSERAFIM Community", "url": "https://weverse.io/lesserafim" },
+      "twitter": { "handle": "@LE_SSERAFIM", "url": "https://x.com/LE_SSERAFIM" }
+    }
+  },
+  {
+    "id": 11,
+    "slug": "jimin",
+    "name": "Jimin",
+    "type": "INDIVIDUAL",
+    "parentArtistId": 1,
+    "groupName": "BTS",
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "54.1M",
+    "officialHandles": {
+      "youtube": { "handle": "@BTS", "url": "https://www.youtube.com/@BTS" },
+      "instagram": { "handle": "@j.m", "url": "https://www.instagram.com/j.m/" },
+      "tiktok": { "handle": "@bts_official_bighit", "url": "https://www.tiktok.com/@bts_official_bighit" },
+      "spotify": { "handle": "Jimin", "url": "https://open.spotify.com/artist/1oSP2vPPh574sRj2jC8gd1" },
+      "weverse": { "handle": "BTS Community (Jimin)", "url": "https://weverse.io/bts" },
+      "twitter": { "handle": "@bts_bighit", "url": "https://x.com/bts_bighit" }
+    }
+  },
+  {
+    "id": 12,
+    "slug": "v",
+    "name": "V (Kim Taehyung)",
+    "type": "INDIVIDUAL",
+    "parentArtistId": 1,
+    "groupName": "BTS",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "65.8M",
+    "officialHandles": {
+      "youtube": { "handle": "@BTS", "url": "https://www.youtube.com/@BTS" },
+      "instagram": { "handle": "@thv", "url": "https://www.instagram.com/thv/" },
+      "tiktok": { "handle": "@bts_official_bighit", "url": "https://www.tiktok.com/@bts_official_bighit" },
+      "spotify": { "handle": "V", "url": "https://open.spotify.com/artist/3NrfEzSpTawL2avHd9YyMo" },
+      "weverse": { "handle": "BTS Community (V)", "url": "https://weverse.io/bts" },
+      "twitter": { "handle": "@bts_bighit", "url": "https://x.com/bts_bighit" }
+    }
+  },
+  {
+    "id": 13,
+    "slug": "jungkook",
+    "name": "Jungkook",
+    "type": "INDIVIDUAL",
+    "parentArtistId": 1,
+    "groupName": "BTS",
+    "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "41.2M",
+    "officialHandles": {
+      "youtube": { "handle": "@BTS", "url": "https://www.youtube.com/@BTS" },
+      "instagram": { "handle": "@bts.bighitofficial", "url": "https://www.instagram.com/bts.bighitofficial/" },
+      "tiktok": { "handle": "@jungkook", "url": "https://www.tiktok.com/@jungkook" },
+      "spotify": { "handle": "Jung Kook", "url": "https://open.spotify.com/artist/6eUKZXaKkcviH0v9wM8jG7" },
+      "weverse": { "handle": "BTS Community (Jungkook)", "url": "https://weverse.io/bts" },
+      "twitter": { "handle": "@bts_bighit", "url": "https://x.com/bts_bighit" }
+    }
+  },
+  {
+    "id": 14,
+    "slug": "lisa",
+    "name": "Lisa",
+    "type": "INDIVIDUAL",
+    "parentArtistId": 2,
+    "groupName": "BLACKPINK",
+    "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "104.2M",
+    "officialHandles": {
+      "youtube": { "handle": "@LilifilmOfficial", "url": "https://www.youtube.com/@LilifilmOfficial" },
+      "instagram": { "handle": "@lalalalisa_m", "url": "https://www.instagram.com/lalalalisa_m/" },
+      "tiktok": { "handle": "@wearelloud", "url": "https://www.tiktok.com/@wearelloud" },
+      "spotify": { "handle": "LISA", "url": "https://open.spotify.com/artist/5L1h0v1W95" },
+      "weverse": { "handle": "BLACKPINK Community (Lisa)", "url": "https://weverse.io/blackpink" },
+      "twitter": { "handle": "@wearelloud", "url": "https://x.com/wearelloud" }
+    }
+  },
+  {
+    "id": 15,
+    "slug": "jennie",
+    "name": "Jennie",
+    "type": "INDIVIDUAL",
+    "parentArtistId": 2,
+    "groupName": "BLACKPINK",
+    "avatar": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "85.6M",
+    "officialHandles": {
+      "youtube": { "handle": "@Jennierubyjane", "url": "https://www.youtube.com/@Jennierubyjane" },
+      "instagram": { "handle": "@jennierubyjane", "url": "https://www.instagram.com/jennierubyjane/" },
+      "tiktok": { "handle": "@jennierubyjane", "url": "https://www.tiktok.com/@jennierubyjane" },
+      "spotify": { "handle": "JENNIE", "url": "https://open.spotify.com/artist/250yPk1Gky" },
+      "weverse": { "handle": "BLACKPINK Community (Jennie)", "url": "https://weverse.io/blackpink" },
+      "twitter": { "handle": "@oddatelier", "url": "https://x.com/oddatelier" }
+    }
+  },
+  {
+    "id": 16,
+    "slug": "rose",
+    "name": "Rosé",
+    "type": "INDIVIDUAL",
+    "parentArtistId": 2,
+    "groupName": "BLACKPINK",
+    "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "79.1M",
+    "officialHandles": {
+      "youtube": { "handle": "@ROSEofficial", "url": "https://www.youtube.com/@ROSEofficial" },
+      "instagram": { "handle": "@roses_are_rosie", "url": "https://www.instagram.com/roses_are_rosie/" },
+      "tiktok": { "handle": "@roses_are_rosie", "url": "https://www.tiktok.com/@roses_are_rosie" },
+      "spotify": { "handle": "ROSÉ", "url": "https://open.spotify.com/artist/3v155823" },
+      "weverse": { "handle": "BLACKPINK Community (Rosé)", "url": "https://weverse.io/blackpink" },
+      "twitter": { "handle": "@numberoneHQ", "url": "https://x.com/numberoneHQ" }
+    }
+  },
+  {
+    "id": 17,
+    "slug": "nayeon",
+    "name": "Nayeon",
+    "type": "INDIVIDUAL",
+    "parentArtistId": 3,
+    "groupName": "TWICE",
+    "avatar": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "12.4M",
+    "officialHandles": {
+      "youtube": { "handle": "@TWICE", "url": "https://www.youtube.com/@TWICE" },
+      "instagram": { "handle": "@nayeonyny", "url": "https://www.instagram.com/nayeonyny/" },
+      "tiktok": { "handle": "@twice_tiktok_official", "url": "https://www.tiktok.com/@twice_tiktok_official" },
+      "spotify": { "handle": "NAYEON", "url": "https://open.spotify.com/artist/0N385472" },
+      "weverse": { "handle": "TWICE Community (Nayeon)", "url": "https://weverse.io/twice" },
+      "twitter": { "handle": "@JYPETWICE", "url": "https://x.com/JYPETWICE" }
+    }
+  },
+  {
+    "id": 18,
+    "slug": "iu",
+    "name": "IU (Lee Ji-eun)",
+    "type": "INDIVIDUAL",
+    "parentArtistId": null,
+    "groupName": "Soloist",
+    "avatar": "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "32.8M",
+    "officialHandles": {
+      "youtube": { "handle": "@dlwlrma", "url": "https://www.youtube.com/@dlwlrma" },
+      "instagram": { "handle": "@dlwlrma", "url": "https://www.instagram.com/dlwlrma/" },
+      "tiktok": { "handle": "@iu_official", "url": "https://www.tiktok.com/@iu_official" },
+      "spotify": { "handle": "IU", "url": "https://open.spotify.com/artist/3HqSL12P5utnqN-q" },
+      "weverse": { "handle": "IU Community", "url": "https://weverse.io/iu" },
+      "twitter": { "handle": "@_iuofficial", "url": "https://x.com/_iuofficial" }
+    }
+  },
+  {
+    "id": 19,
+    "slug": "taeyang",
+    "name": "Taeyang",
+    "type": "INDIVIDUAL",
+    "parentArtistId": null,
+    "groupName": "BIGBANG / Soloist",
+    "avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "14.5M",
+    "officialHandles": {
+      "youtube": { "handle": "@TAEYANG_Official", "url": "https://www.youtube.com/@TAEYANG_Official" },
+      "instagram": { "handle": "@__youngbae__", "url": "https://www.instagram.com/__youngbae__/" },
+      "tiktok": { "handle": "@taeyang_theblacklabel", "url": "https://www.tiktok.com/@taeyang_theblacklabel" },
+      "spotify": { "handle": "TAEYANG", "url": "https://open.spotify.com/artist/2W157252" },
+      "weverse": { "handle": "TAEYANG Community", "url": "https://weverse.io/taeyang" },
+      "twitter": { "handle": "@Realtaeyang", "url": "https://x.com/Realtaeyang" }
+    }
+  },
+  {
+    "id": 20,
+    "slug": "baekhyun",
+    "name": "Baekhyun",
+    "type": "INDIVIDUAL",
+    "parentArtistId": 7,
+    "groupName": "EXO",
+    "avatar": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&auto=format&fit=crop&q=80",
+    "followerCount": "21.9M",
+    "officialHandles": {
+      "youtube": { "handle": "@baekhyun", "url": "https://www.youtube.com/@baekhyun" },
+      "instagram": { "handle": "@baekhyunee_exo", "url": "https://www.instagram.com/baekhyunee_exo/" },
+      "tiktok": { "handle": "@baekhyun_inb100", "url": "https://www.tiktok.com/@baekhyun_inb100" },
+      "spotify": { "handle": "BAEKHYUN", "url": "https://open.spotify.com/artist/4q354728" },
+      "weverse": { "handle": "EXO Community (Baekhyun)", "url": "https://weverse.io/exo" },
+      "twitter": { "handle": "@B_hundred_Hyun", "url": "https://x.com/B_hundred_Hyun" }
+    }
+  }
+]
