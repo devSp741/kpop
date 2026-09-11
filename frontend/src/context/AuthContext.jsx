@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "sonner";
 import { getAuthToken, getCurrentUserProfile, loginUser as apiLogin, registerUser as apiRegister, logoutUser as apiLogout, toggleFollowArtist as apiToggleFollow } from "@/services/api";
 
 const AuthContext = createContext();
@@ -87,7 +88,7 @@ export function AuthProvider({ children }) {
   };
 
   // Toggle follow an artist with auth check
-  const toggleFollow = async (artistId) => {
+  const toggleFollow = async (artistId, artistName = "Artist") => {
     if (!token) {
       openLoginModal();
       return false;
@@ -116,10 +117,27 @@ export function AuthProvider({ children }) {
           }
           return next;
         });
+
+        if (res.data.isFollowed) {
+          if (res.data.latestNotification) {
+            toast.success(`Live Radar Alert: Followed ${artistName}!`, {
+              description: `Latest Sync: ${res.data.latestNotification.summaryTitle}`,
+            });
+          } else {
+            toast.success(`Followed ${artistName}!`, {
+              description: `Real-time updates synced to your custom feed.`,
+            });
+          }
+        } else {
+          toast.info(`Unfollowed ${artistName}`, {
+            description: `Removed from your bias radar feed.`,
+          });
+        }
       }
       return true;
     } catch (err) {
       console.error("Failed to toggle follow artist:", err);
+      toast.error("Failed to update follow status. Please try again.");
       return false;
     }
   };

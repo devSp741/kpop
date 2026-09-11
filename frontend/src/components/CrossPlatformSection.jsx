@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
 
 const heroIdolsImg = "/assets/hero-idols-DZmJP1G3.jpg";
 const idolFallback = "/assets/idol-2-CpsI_gBv.jpg";
@@ -54,6 +54,20 @@ const platformBadges = [
 ];
 
 export default function CrossPlatformSection() {
+  const { user, openRegisterModal } = useAuth();
+
+  const handleStartTracking = (e) => {
+    e.preventDefault();
+    if (!user) {
+      openRegisterModal();
+    } else {
+      const target = document.getElementById("supported-idols");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   return (
     <section className="relative py-16 sm:py-24 bg-white text-slate-900 overflow-hidden">
       <div className="max-w-screen-xl px-6 mx-auto relative z-10">
@@ -122,12 +136,12 @@ export default function CrossPlatformSection() {
             </p>
 
             {/* CTA Button */}
-            <Link
-              href="#"
-              className="inline-flex items-center justify-center rounded-full bg-[#0f172a] px-7 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold text-white hover:bg-slate-800 transition-all shadow-md active:scale-95"
+            <button
+              onClick={handleStartTracking}
+              className="inline-flex items-center justify-center rounded-full bg-[#0f172a] px-7 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold text-white hover:bg-slate-800 transition-all shadow-md active:scale-95 cursor-pointer"
             >
               Start tracking
-            </Link>
+            </button>
           </motion.div>
         </div>
       </div>

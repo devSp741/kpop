@@ -58,3 +58,13 @@ CREATE TABLE IF NOT EXISTS activity_events (
     INDEX idx_platform_published (platform, published_at DESC),
     INDEX idx_artist_published (artist_id, published_at DESC)
 ) ENGINE=InnoDB;
+
+-- 5. User Dismissed Events Table (Persistent Database Swipe-Dismiss Tracking)
+CREATE TABLE IF NOT EXISTS user_dismissed_events (
+    user_id INT NOT NULL,
+    event_id INT NOT NULL,
+    dismissed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, event_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (event_id) REFERENCES activity_events(id) ON DELETE CASCADE
+) ENGINE=InnoDB;

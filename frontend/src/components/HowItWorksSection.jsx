@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
 
 const concertBg = "/assets/concert-crowd-BGux2aCJ.jpg";
 
@@ -91,6 +91,20 @@ const itemVariants = {
 };
 
 export default function HowItWorksSection() {
+  const { user, openRegisterModal } = useAuth();
+
+  const handleJoinAction = (e) => {
+    e.preventDefault();
+    if (!user) {
+      openRegisterModal();
+    } else {
+      const target = document.getElementById("supported-idols");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   return (
     <section className="relative py-16 sm:py-24 bg-white text-slate-900 overflow-hidden">
       <div className="max-w-screen-xl px-6 mx-auto relative z-10">
@@ -178,12 +192,12 @@ export default function HowItWorksSection() {
             <p className="text-sm sm:text-base md:text-lg text-white/90 font-normal leading-relaxed mb-6 sm:mb-8 max-w-md">
               Whether you follow one group or fifty, KpopRadar keeps you connected to the content that matters most.
             </p>
-            <Link
-              href="#"
-              className="inline-flex items-center justify-center rounded-full bg-white px-7 sm:px-8 py-3.5 text-sm sm:text-base font-semibold text-slate-900 hover:bg-slate-100 transition-all shadow-lg active:scale-95"
+            <button
+              onClick={handleJoinAction}
+              className="inline-flex items-center justify-center rounded-full bg-white px-7 sm:px-8 py-3.5 text-sm sm:text-base font-semibold text-slate-900 hover:bg-slate-100 transition-all shadow-lg active:scale-95 cursor-pointer"
             >
               Join the community
-            </Link>
+            </button>
           </div>
         </motion.div>
       </div>

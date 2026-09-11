@@ -12,6 +12,10 @@ import pool from '../config/db.js';
  * @param {number|null} artistId - Optional artist ID for targeted sync
  */
 export async function syncTwitterFeed(artistId = null) {
+  if (process.env.ENABLE_BACKGROUND_SYNC === 'false') {
+    return { success: true, count: 0, paused: true, message: 'Twitter sync paused via ENABLE_BACKGROUND_SYNC=false' };
+  }
+
   const token = process.env.TWITTER_BEARER_TOKEN;
 
   if (!token || token === 'your_twitter_bearer_token_here') {

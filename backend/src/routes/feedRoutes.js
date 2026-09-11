@@ -17,5 +17,8 @@ router.get('/', (req, res, next) => {
 
 router.post('/sync', feedController.syncFeed);
 router.post('/webhook/twitter', feedController.twitterWebhook);
+router.get('/webhook/instagram', feedController.verifyInstagramWebhook);
+router.post('/webhook/instagram', feedController.instagramWebhook);
+router.post('/dismiss/:eventId', authenticateJWT, feedController.dismissFeedEvent);
 
 export default router;

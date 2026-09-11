@@ -1,10 +1,24 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
 
 export default function BiasCTASection() {
+  const { user, openRegisterModal } = useAuth();
+
+  const handleGetStarted = (e) => {
+    e.preventDefault();
+    if (!user) {
+      openRegisterModal();
+    } else {
+      const target = document.getElementById("supported-idols");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   return (
     <section className="relative py-20 sm:py-28 bg-white text-slate-900 overflow-hidden">
       <div className="max-w-screen-xl px-6 mx-auto relative z-10 text-center flex flex-col items-center">
@@ -29,12 +43,12 @@ export default function BiasCTASection() {
             Free to use. Takes under a minute to set up. Never<br className="hidden sm:inline" /> scroll through five apps again.
           </p>
 
-          <Link
-            href="#"
-            className="inline-flex items-center justify-center rounded-full bg-[#0f172a] px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white hover:bg-slate-800 transition-all shadow-lg active:scale-95"
+          <button
+            onClick={handleGetStarted}
+            className="inline-flex items-center justify-center rounded-full bg-[#0f172a] px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white hover:bg-slate-800 transition-all shadow-lg active:scale-95 cursor-pointer"
           >
             Get started free
-          </Link>
+          </button>
         </motion.div>
       </div>
     </section>

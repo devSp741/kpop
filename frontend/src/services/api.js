@@ -136,6 +136,14 @@ export async function fetchFollowingFeed(params = {}) {
 }
 
 /**
+ * Persistently dismiss/swipe away a feed event for the user in database
+ * Endpoint: POST /api/feed/dismiss/:eventId
+ */
+export async function dismissFeedEvent(eventId) {
+  return request(`/feed/dismiss/${eventId}`, { method: 'POST' }, true);
+}
+
+/**
  * Login user with email & password
  * Endpoint: POST /api/auth/login
  * Security: Saves ONLY the JWT Token in localStorage

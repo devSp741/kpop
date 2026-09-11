@@ -14,6 +14,10 @@ import pool from '../config/db.js';
  */
 export async function syncYouTubeFeed(artistId = null) {
   try {
+    if (process.env.ENABLE_BACKGROUND_SYNC === 'false') {
+      return { success: true, count: 0, paused: true, message: 'YouTube sync paused via ENABLE_BACKGROUND_SYNC=false' };
+    }
+
     let query = `SELECT id, name, slug, official_handles FROM artists WHERE is_active = 1`;
     const queryParams = [];
 

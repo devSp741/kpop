@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { fetchActivityFeed, fetchFollowingFeed } from "@/services/api";
+import { motion, AnimatePresence } from "framer-motion";
+import { fetchActivityFeed, fetchFollowingFeed, dismissFeedEvent } from "@/services/api";
 import { formatTimeAgo } from "@/utils/formatTime";
 import Loader from "@/components/ui/Loader";
 import { useAuth } from "@/context/AuthContext";
@@ -97,11 +97,28 @@ const platformBadges = [
 ];
 
 export default function HeroSection() {
-  const { user, openRegisterModal, openLoginModal } = useAuth();
+  const { user, token, openRegisterModal, openLoginModal } = useAuth();
   const [feedItems, setFeedItems] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [activePlatform, setActivePlatform] = React.useState("all");
   const [feedMode, setFeedMode] = React.useState("global"); // 'global' | 'following'
+
+  // Persistently dismiss feed item in Database via API
+  const handleDismissItem = async (eventId) => {
+    if (eventId === undefined || eventId === null) return;
+    
+    // Optimistic UI update: Remove item immediately from state
+    setFeedItems((prev) => prev.filter((item) => item.id !== eventId));
+
+    // Save in MySQL database user_dismissed_events table permanently via API
+    if (token) {
+      try {
+        await dismissFeedEvent(eventId);
+      } catch (err) {
+        console.error("Failed to persist dismissed event in DB:", err);
+      }
+    }
+  };
 
   React.useEffect(() => {
     let isMounted = true;
@@ -110,10 +127,10 @@ export default function HeroSection() {
       try {
         if (isInitial) setLoading(true);
         let response;
-        if (feedMode === "following" && user) {
-          response = await fetchFollowingFeed({ platform: activePlatform, limit: 6 });
+        if (feedMode === "following") {
+          response = await fetchFollowingFeed({ platform: activePlatform, limit: 12 });
         } else {
-          response = await fetchActivityFeed({ platform: activePlatform, limit: 6 });
+          response = await fetchActivityFeed({ platform: activePlatform, limit: 12 });
         }
 
         if (isMounted && response?.data) {
@@ -142,7 +159,7 @@ export default function HeroSection() {
       isMounted = false;
       clearInterval(pollInterval);
     };
-  }, [activePlatform, feedMode, user]);
+  }, [activePlatform, feedMode, user, token]);
 
   const getPlatformMeta = (platformName) => {
     const key = (platformName || "").toLowerCase();
@@ -348,15 +365,17 @@ export default function HeroSection() {
 
               <div className="h-px bg-slate-200 mb-3 mx-1" />
 
-              {/* Notification Feed Cards (Dynamic from Backend API) */}
-              <div className="space-y-2 text-left">
+              {/* Notification Feed Cards Container (Scrollable & Touch-Swipeable to Dismiss) */}
+              <div className="space-y-2 text-left max-h-[380px] sm:max-h-[420px] overflow-y-auto pr-1 touch-pan-y scrollbar-slim">
                 {loading ? (
                   <Loader text="Loading live feed..." size="sm" className="py-10" />
                 ) : feedItems.length === 0 ? (
                   <div className="py-12 px-4 text-center">
                     <p className="text-xs text-slate-500 font-medium">
                       {feedMode === "following"
-                        ? "You haven't followed any idols yet! Follow your bias below to build your feed."
+                        ? (activePlatform !== "all" 
+                            ? `No recent ${activePlatform.toUpperCase()} updates for your followed idols.` 
+                            : "No recent updates found for your followed idols.")
                         : "No updates found for this platform filter."}
                     </p>
                     {feedMode === "following" && (
@@ -364,53 +383,71 @@ export default function HeroSection() {
                         href="#supported-idols"
                         className="inline-block mt-3 px-4 py-1.5 rounded-full bg-slate-900 text-white text-[11px] font-semibold"
                       >
-                        Find Idols to Follow
+                        Find More Idols
                       </Link>
                     )}
                   </div>
                 ) : (
-                  feedItems.map((item, idx) => {
-                    const meta = getPlatformMeta(item.platform);
-                    const IconComp = meta.icon || LogoMark;
-                    const artistName = item.artistName || item.artist_name;
-                    const summaryTitle = item.summaryTitle || item.summary_title;
-                    const bodyText = artistName ? `${artistName}: ${summaryTitle}` : summaryTitle;
-                    const publishedTime = item.publishedAt || item.published_at;
-                    const timeText = publishedTime ? formatTimeAgo(publishedTime) : "Just now";
-                    const sourceUrl = item.sourceUrl || item.source_url || "#";
+                  <AnimatePresence mode="popLayout">
+                    {feedItems.map((item, idx) => {
+                      const meta = getPlatformMeta(item.platform);
+                      const IconComp = meta.icon || LogoMark;
+                      const artistName = item.artistName || item.artist_name;
+                      const summaryTitle = item.summaryTitle || item.summary_title;
+                      const bodyText = artistName ? `${artistName}: ${summaryTitle}` : summaryTitle;
+                      const publishedTime = item.publishedAt || item.published_at;
+                      const timeText = publishedTime ? formatTimeAgo(publishedTime) : "Just now";
+                      const sourceUrl = item.sourceUrl || item.source_url || "#";
+                      const itemId = item.id || `feed-item-${idx}`;
 
-                    return (
-                      <div
-                        key={item.id || idx}
-                        onClick={() => {
-                          if (sourceUrl && sourceUrl !== "#") {
-                            window.open(sourceUrl, "_blank", "noopener,noreferrer");
-                          }
-                        }}
-                        className="flex items-center gap-2.5 p-2 sm:p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/90 border border-slate-200/80 shadow-xs cursor-pointer transition-colors group"
-                      >
-                        <div
-                          className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
-                          style={{ backgroundColor: meta.color }}
+                      return (
+                        <motion.div
+                          key={itemId}
+                          layout
+                          initial={{ opacity: 0, y: 12, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
+                          exit={{ opacity: 0, x: 250, scale: 0.8 }}
+                          transition={{ duration: 0.25 }}
+                          drag="x"
+                          dragConstraints={{ left: 0, right: 0 }}
+                          dragElastic={0.6}
+                          onDragEnd={(e, info) => {
+                            // Swipe left or right by > 75px to dismiss notification card
+                            if (Math.abs(info.offset.x) > 75) {
+                              handleDismissItem(item.id);
+                            }
+                          }}
+                          onClick={() => {
+                            if (sourceUrl && sourceUrl !== "#") {
+                              window.open(sourceUrl, "_blank", "noopener,noreferrer");
+                            }
+                          }}
+                          className="flex items-center gap-2.5 p-2 sm:p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/90 border border-slate-200/80 shadow-xs cursor-grab active:cursor-grabbing select-none transition-colors group relative touch-pan-y"
+                          title="Click to open or swipe left/right to dismiss"
                         >
-                          <IconComp className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "#0f172a" }}>
-                              {meta.name}
-                            </span>
-                            <span className="text-[10px] shrink-0" style={{ color: "#94a3b8" }}>
-                              {timeText}
-                            </span>
+                          <div
+                            className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 pointer-events-none"
+                            style={{ backgroundColor: meta.color }}
+                          >
+                            <IconComp className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white" />
                           </div>
-                          <p className="text-[10.5px] sm:text-[11px] mt-0.5 truncate font-medium" style={{ color: "#475569" }}>
-                            {bodyText}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })
+                          <div className="flex-1 min-w-0 pointer-events-none">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "#0f172a" }}>
+                                {meta.name}
+                              </span>
+                              <span className="text-[10px] shrink-0" style={{ color: "#94a3b8" }}>
+                                {timeText}
+                              </span>
+                            </div>
+                            <p className="text-[10.5px] sm:text-[11px] mt-0.5 truncate font-medium" style={{ color: "#475569" }}>
+                              {bodyText}
+                            </p>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </AnimatePresence>
                 )}
               </div>
             </div>
