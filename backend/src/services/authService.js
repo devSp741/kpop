@@ -52,3 +52,27 @@ export const loginUser = async ({ email, password }) => {
 
   return { userId: user.id, name: user.name, email: user.email, token };
 };
+
+export const getUserById = async (userId) => {
+  const [rows] = await pool.query('SELECT id, name, email, role, created_at FROM users WHERE id = ?', [userId]);
+  if (rows.length === 0) {
+    const error = new Error('User not found');
+    error.statusCode = 401;
+    throw error;
+  }
+
+  const user = rows[0];
+
+  // Fetch IDs of all artists followed by this user
+  const [follows] = await pool.query('SELECT artist_id FROM user_follows WHERE user_id = ?', [userId]);
+  const followedArtistIds = follows.map(row => row.artist_id);
+
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    createdAt: user.created_at,
+    followedArtistIds,
+  };
+};

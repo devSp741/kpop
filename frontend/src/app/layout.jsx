@@ -108,6 +108,9 @@ const jsonLd = {
     "Track real-time K-Pop idol updates, social media drops, comeback schedules, and YouTube releases in one clean feed.",
 };
 
+import { AuthProvider } from "@/context/AuthContext";
+import AuthModal from "@/components/AuthModal";
+
 export default function RootLayout({ children }) {
   return (
     <html
@@ -121,9 +124,13 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="min-h-full bg-[var(--color-bg)] text-[var(--color-text-main)] flex flex-col font-sans">
-        {children}
-        <Toaster theme="dark" position="top-right" closeButton />
+        <AuthProvider>
+          {children}
+          <AuthModal />
+          <Toaster theme="dark" position="top-right" closeButton />
+        </AuthProvider>
       </body>
     </html>
   );
 }
+

@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS user_follows (
 CREATE TABLE IF NOT EXISTS activity_events (
     id INT AUTO_INCREMENT PRIMARY KEY,
     artist_id INT NOT NULL,
-    platform ENUM('youtube', 'instagram', 'tiktok', 'spotify', 'weverse', 'twitter') NOT NULL,
+    platform ENUM('youtube', 'instagram', 'tiktok', 'spotify', 'weverse', 'twitter', 'facebook') NOT NULL,
     event_type ENUM('MV', 'STORY', 'DANCE_CHALLENGE', 'MUSIC_RELEASE', 'LIVE_STREAM', 'POST') NOT NULL,
     summary_title TEXT NOT NULL,
     thumbnail_url TEXT NULL,

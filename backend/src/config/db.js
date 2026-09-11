@@ -10,6 +10,7 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'kpop_radar',
   port: Number(process.env.DB_PORT) || 3306,
+  timezone: '+00:00',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,

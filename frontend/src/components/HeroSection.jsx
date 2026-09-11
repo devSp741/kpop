@@ -3,6 +3,11 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { fetchActivityFeed, fetchFollowingFeed } from "@/services/api";
+import { formatTimeAgo } from "@/utils/formatTime";
+import Loader from "@/components/ui/Loader";
+import { useAuth } from "@/context/AuthContext";
+import { Globe, Heart, Lock, Check } from "lucide-react";
 
 // Media Assets
 const demoVideo = "/assets/demo-video-B_b7c4Gx.mp4";
@@ -68,6 +73,12 @@ const SpotifyIcon = ({ className = "w-5 h-5", colored = false }) => (
   </svg>
 );
 
+const FacebookIcon = ({ className = "w-5 h-5", colored = false }) => (
+  <svg className={className} viewBox="0 0 24 24" fill={colored ? "#1877F2" : "currentColor"}>
+    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+  </svg>
+);
+
 const LogoMark = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -75,25 +86,87 @@ const LogoMark = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
-const notificationFeed = [
-  { platform: "YouTube", icon: YouTubeIcon, color: "hsl(0 72% 51%)", body: "JIMIN posted: 'Who' Official MV", time: "Just now" },
-  { platform: "Instagram", icon: InstagramIcon, color: "hsl(330 80% 55%)", body: "V shared a new story", time: "2m ago" },
-  { platform: "TikTok", icon: TikTokIcon, color: "#000000", body: "Stray Kids posted a dance challenge", time: "5m ago" },
-  { platform: "Spotify", icon: SpotifyIcon, color: "hsl(141 73% 42%)", body: "BLACKPINK dropped 'Pink Venom' remix", time: "12m ago" },
-  { platform: "Weverse", icon: WeverseIcon, color: "hsl(160 60% 45%)", body: "Jungkook is live now!", time: "18m ago" },
-  { platform: "X", icon: XIcon, color: "hsl(0 0% 10%)", body: "aespa retweeted a fan post", time: "24m ago" }
-];
-
 const platformBadges = [
-  { icon: YouTubeIcon, color: "hsl(0 72% 51%)" },
-  { icon: InstagramIcon, color: "hsl(330 80% 55%)" },
-  { icon: TikTokIcon, color: "#000000" },
-  { icon: SpotifyIcon, color: "hsl(141 73% 42%)" },
-  { icon: WeverseIcon, color: "hsl(160 60% 45%)" },
-  { icon: XIcon, color: "hsl(0 0% 10%)" }
+  { id: "youtube", name: "YouTube", icon: YouTubeIcon, color: "hsl(0 72% 51%)" },
+  { id: "facebook", name: "Facebook", icon: FacebookIcon, color: "#1877F2" },
+  { id: "instagram", name: "Instagram", icon: InstagramIcon, color: "hsl(330 80% 55%)" },
+  { id: "tiktok", name: "TikTok", icon: TikTokIcon, color: "#000000" },
+  { id: "spotify", name: "Spotify", icon: SpotifyIcon, color: "hsl(141 73% 42%)" },
+  { id: "weverse", name: "Weverse", icon: WeverseIcon, color: "hsl(160 60% 45%)" },
+  { id: "twitter", name: "X", icon: XIcon, color: "hsl(0 0% 10%)" }
 ];
 
 export default function HeroSection() {
+  const { user, openRegisterModal, openLoginModal } = useAuth();
+  const [feedItems, setFeedItems] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [activePlatform, setActivePlatform] = React.useState("all");
+  const [feedMode, setFeedMode] = React.useState("global"); // 'global' | 'following'
+
+  React.useEffect(() => {
+    let isMounted = true;
+
+    async function loadFeed(isInitial = false) {
+      try {
+        if (isInitial) setLoading(true);
+        let response;
+        if (feedMode === "following" && user) {
+          response = await fetchFollowingFeed({ platform: activePlatform, limit: 6 });
+        } else {
+          response = await fetchActivityFeed({ platform: activePlatform, limit: 6 });
+        }
+
+        if (isMounted && response?.data) {
+          setFeedItems(response.data);
+        }
+      } catch (err) {
+        if (isInitial) {
+          console.error("Failed to load live activity feed:", err);
+          if (isMounted) setFeedItems([]);
+        }
+      } finally {
+        if (isMounted && isInitial) setLoading(false);
+      }
+    }
+
+    loadFeed(true);
+
+    // Silent background auto-polling every 15 seconds (bina page refresh ke live data auto-update)
+    const pollInterval = setInterval(() => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        loadFeed(false);
+      }
+    }, 15000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(pollInterval);
+    };
+  }, [activePlatform, feedMode, user]);
+
+  const getPlatformMeta = (platformName) => {
+    const key = (platformName || "").toLowerCase();
+    switch (key) {
+      case "youtube":
+        return { name: "YouTube", icon: YouTubeIcon, color: "hsl(0 72% 51%)" };
+      case "facebook":
+        return { name: "Facebook", icon: FacebookIcon, color: "#1877F2" };
+      case "instagram":
+        return { name: "Instagram", icon: InstagramIcon, color: "hsl(330 80% 55%)" };
+      case "tiktok":
+        return { name: "TikTok", icon: TikTokIcon, color: "#000000" };
+      case "spotify":
+        return { name: "Spotify", icon: SpotifyIcon, color: "hsl(141 73% 42%)" };
+      case "weverse":
+        return { name: "Weverse", icon: WeverseIcon, color: "hsl(160 60% 45%)" };
+      case "twitter":
+      case "x":
+        return { name: "X", icon: XIcon, color: "hsl(0 0% 10%)" };
+      default:
+        return { name: platformName || "KPOP", icon: LogoMark, color: "#0f172a" };
+    }
+  };
+
   return (
     <div className="w-full relative">
       {/* Background Decorative Shapes Layer */}
@@ -144,14 +217,14 @@ export default function HeroSection() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-8 sm:mb-10 w-full max-w-[280px] sm:max-w-none mx-auto"
           >
-            <Link
-              href="#"
-              className="w-full sm:w-auto text-center rounded-full bg-white px-7 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold text-slate-900 hover:opacity-90 transition-opacity shadow-md"
+            <button
+              onClick={() => user ? (window.location.hash = '#supported-idols') : openRegisterModal()}
+              className="w-full sm:w-auto text-center rounded-full bg-white px-7 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold text-slate-900 hover:opacity-90 transition-opacity shadow-md cursor-pointer"
             >
-              Get started free
-            </Link>
+              {user ? `Welcome, ${user.name}` : "Get started free"}
+            </button>
             <Link
-              href="#"
+              href="#supported-idols"
               className="w-full sm:w-auto text-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-7 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold text-white hover:bg-white/20 transition-all"
             >
               See how it works
@@ -186,83 +259,159 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              {/* Inbox Title Header */}
-              <div className="mb-2.5 sm:mb-3 px-1 text-left">
-                <p
-                  className="text-[10px] font-bold uppercase tracking-widest mb-0.5"
-                  style={{ color: "#64748b" }}
-                >
-                  KpopRadar
-                </p>
-                <h3
-                  className="font-bold leading-snug"
-                  style={{ color: "#0f172a", fontSize: "clamp(1.35rem, 1.5vw, 1.75rem)" }}
-                >
-                  All your platforms,<br />one inbox
-                </h3>
+              {/* Inbox Title Header & Mode Switcher */}
+              <div className="mb-2.5 sm:mb-3 px-1 text-left flex items-start justify-between">
+                <div>
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <p
+                      className="text-[10px] font-bold uppercase tracking-widest"
+                      style={{ color: "#64748b" }}
+                    >
+                      KpopRadar • Live Auto-Sync
+                    </p>
+                  </div>
+                  <h3
+                    className="font-bold leading-snug"
+                    style={{ color: "#0f172a", fontSize: "clamp(1.2rem, 1.4vw, 1.6rem)" }}
+                  >
+                    {feedMode === "following" ? "My Followed Bias Feed" : "All Platforms Inbox"}
+                  </h3>
+                </div>
               </div>
 
-              {/* Platform Badges Row */}
+              {/* Feed Mode Switcher (All Idols vs My Bias Feed) */}
+              <div className="flex bg-slate-100 p-1 rounded-xl mb-3">
+                <button
+                  onClick={() => setFeedMode("global")}
+                  className={`flex-1 py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                    feedMode === "global" ? "bg-white text-slate-900 shadow-xs font-bold" : "text-slate-500 hover:text-slate-700"
+                  }`}
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>All Idols</span>
+                </button>
+                <button
+                  onClick={() => {
+                    if (!user) {
+                      openLoginModal();
+                    } else {
+                      setFeedMode("following");
+                    }
+                  }}
+                  className={`flex-1 py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                    feedMode === "following" ? "bg-emerald-500 text-white shadow-xs font-bold" : "text-slate-500 hover:text-slate-700"
+                  }`}
+                >
+                  <Heart className={`w-3.5 h-3.5 ${feedMode === "following" ? "fill-current" : ""}`} />
+                  <span>My Feed</span>
+                  {!user ? (
+                    <Lock className="w-3 h-3 opacity-70" />
+                  ) : (
+                    <Check className="w-3 h-3 text-emerald-100" />
+                  )}
+                </button>
+              </div>
+
+              {/* Platform Filter Badges Row */}
               <div className="flex items-center gap-1.5 mb-3 sm:mb-4 flex-wrap">
-                {platformBadges.map((badge, idx) => {
+                <button
+                  onClick={() => setActivePlatform("all")}
+                  className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${
+                    activePlatform === "all" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+                >
+                  All
+                </button>
+                {platformBadges.map((badge) => {
                   const IconComp = badge.icon;
+                  const isActive = activePlatform === badge.id;
                   return (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, scale: 0.7 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: idx * 0.07, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      className="w-6 sm:w-7 h-6 sm:h-7 rounded-lg flex items-center justify-center shrink-0"
+                    <motion.button
+                      key={badge.id}
+                      onClick={() => setActivePlatform(isActive ? "all" : badge.id)}
+                      whileTap={{ scale: 0.95 }}
+                      className={`w-6 sm:w-7 h-6 sm:h-7 rounded-lg flex items-center justify-center shrink-0 cursor-pointer transition-transform ${
+                        isActive ? "ring-2 ring-slate-900 scale-110" : "opacity-80 hover:opacity-100"
+                      }`}
                       style={{ backgroundColor: badge.color }}
+                      title={`Filter by ${badge.name}`}
                     >
                       <IconComp className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white" />
-                    </motion.div>
+                    </motion.button>
                   );
                 })}
-                <div className="flex items-center gap-1 ml-1">
-                  <svg width="20" height="12" viewBox="0 0 22 12" fill="none" className="text-slate-400">
-                    <path d="M1 6H18M18 6L13 1M18 6L13 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-lg bg-slate-900 flex items-center justify-center">
-                    <LogoMark className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white" />
-                  </div>
-                </div>
               </div>
 
               <div className="h-px bg-slate-200 mb-3 mx-1" />
 
-              {/* Notification Feed Cards */}
+              {/* Notification Feed Cards (Dynamic from Backend API) */}
               <div className="space-y-2 text-left">
-                {notificationFeed.map((item, idx) => {
-                  const IconComp = item.icon;
-                  return (
-                    <div
-                      key={idx}
-                      className="flex items-center gap-2.5 p-2 sm:p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 shadow-xs"
-                    >
-                      <div
-                        className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: item.color }}
+                {loading ? (
+                  <Loader text="Loading live feed..." size="sm" className="py-10" />
+                ) : feedItems.length === 0 ? (
+                  <div className="py-12 px-4 text-center">
+                    <p className="text-xs text-slate-500 font-medium">
+                      {feedMode === "following"
+                        ? "You haven't followed any idols yet! Follow your bias below to build your feed."
+                        : "No updates found for this platform filter."}
+                    </p>
+                    {feedMode === "following" && (
+                      <Link
+                        href="#supported-idols"
+                        className="inline-block mt-3 px-4 py-1.5 rounded-full bg-slate-900 text-white text-[11px] font-semibold"
                       >
-                        <IconComp className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-[11px] font-semibold" style={{ color: "#0f172a" }}>
-                            {item.platform}
-                          </span>
-                          <span className="text-[10px] shrink-0" style={{ color: "#94a3b8" }}>
-                            {item.time}
-                          </span>
+                        Find Idols to Follow
+                      </Link>
+                    )}
+                  </div>
+                ) : (
+                  feedItems.map((item, idx) => {
+                    const meta = getPlatformMeta(item.platform);
+                    const IconComp = meta.icon || LogoMark;
+                    const artistName = item.artistName || item.artist_name;
+                    const summaryTitle = item.summaryTitle || item.summary_title;
+                    const bodyText = artistName ? `${artistName}: ${summaryTitle}` : summaryTitle;
+                    const publishedTime = item.publishedAt || item.published_at;
+                    const timeText = publishedTime ? formatTimeAgo(publishedTime) : "Just now";
+                    const sourceUrl = item.sourceUrl || item.source_url || "#";
+
+                    return (
+                      <div
+                        key={item.id || idx}
+                        onClick={() => {
+                          if (sourceUrl && sourceUrl !== "#") {
+                            window.open(sourceUrl, "_blank", "noopener,noreferrer");
+                          }
+                        }}
+                        className="flex items-center gap-2.5 p-2 sm:p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/90 border border-slate-200/80 shadow-xs cursor-pointer transition-colors group"
+                      >
+                        <div
+                          className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
+                          style={{ backgroundColor: meta.color }}
+                        >
+                          <IconComp className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white" />
                         </div>
-                        <p className="text-[10.5px] sm:text-[11px] mt-0.5 truncate" style={{ color: "#64748b" }}>
-                          {item.body}
-                        </p>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "#0f172a" }}>
+                              {meta.name}
+                            </span>
+                            <span className="text-[10px] shrink-0" style={{ color: "#94a3b8" }}>
+                              {timeText}
+                            </span>
+                          </div>
+                          <p className="text-[10.5px] sm:text-[11px] mt-0.5 truncate font-medium" style={{ color: "#475569" }}>
+                            {bodyText}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             </div>
           </div>
@@ -277,9 +426,9 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="flex flex-wrap items-center justify-center gap-5 sm:gap-8 mt-10 mb-16 relative z-10 max-w-[290px] sm:max-w-none mx-auto"
         >
-          <InstagramIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
-          <TikTokIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
           <YouTubeIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
+          <FacebookIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
+          <InstagramIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
           <WeverseIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
           <XIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
           <SpotifyIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />

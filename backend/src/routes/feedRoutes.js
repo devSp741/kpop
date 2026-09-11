@@ -15,4 +15,7 @@ router.get('/', (req, res, next) => {
   next();
 }, validate(getFeedQuerySchema, 'query'), feedController.getFeed);
 
+router.post('/sync', feedController.syncFeed);
+router.post('/webhook/twitter', feedController.twitterWebhook);
+
 export default router;

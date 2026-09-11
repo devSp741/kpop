@@ -4,7 +4,6 @@ USE kpop_radar;
 -- Disable FK checks temporarily for bulk insertion
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE activity_events;
-TRUNCATE TABLE user_follows;
 TRUNCATE TABLE artists;
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -172,6 +171,14 @@ INSERT INTO artists (id, slug, name, type, parent_artist_id, group_name, avatar_
     'spotify', JSON_OBJECT('handle', 'BAEKHYUN', 'url', 'https://open.spotify.com/artist/4q354728'),
     'weverse', JSON_OBJECT('handle', 'EXO Community (Baekhyun)', 'url', 'https://weverse.io/exo'),
     'twitter', JSON_OBJECT('handle', '@B_hundred_Hyun', 'url', 'https://x.com/B_hundred_Hyun')
+)),
+(21, 'satyam', 'Satyam', 'INDIVIDUAL', NULL, 'Creator / Soloist', 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=300&auto=format&fit=crop&q=80', '1.2M', JSON_OBJECT(
+    'youtube', JSON_OBJECT('handle', '@developerBaba75', 'url', 'https://www.youtube.com/@developerBaba75'),
+    'facebook', JSON_OBJECT('handle', '@devasamrat75', 'url', 'https://www.facebook.com/devasamrat75/'),
+    'instagram', JSON_OBJECT('handle', '@satyam', 'url', 'https://www.instagram.com/'),
+    'spotify', JSON_OBJECT('handle', 'Satyam', 'url', 'https://open.spotify.com/'),
+    'weverse', JSON_OBJECT('handle', 'Satyam Community', 'url', 'https://weverse.io/'),
+    'twitter', JSON_OBJECT('handle', '@developersp741', 'url', 'https://x.com/developersp741')
 ));
 
 -- 3. Insert Activity Events
