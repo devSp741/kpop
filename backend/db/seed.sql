@@ -168,7 +168,6 @@ INSERT INTO artists (id, slug, name, type, parent_artist_id, group_name, avatar_
 )),
 (21, 'satyam', 'Satyam', 'INDIVIDUAL', NULL, 'Creator / Soloist', 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=300&auto=format&fit=crop&q=80', '1.2M', JSON_OBJECT(
     'youtube', JSON_OBJECT('handle', '@developerBaba75', 'url', 'https://www.youtube.com/@developerBaba75'),
-    'facebook', JSON_OBJECT('handle', '@devasamrat75', 'url', 'https://www.facebook.com/devasamrat75/'),
     'instagram', JSON_OBJECT('handle', '@devel_operbaba', 'url', 'https://www.instagram.com/devel_operbaba/'),
     'spotify', JSON_OBJECT('handle', 'Satyam', 'url', 'https://open.spotify.com/'),
     'weverse', JSON_OBJECT('handle', 'Satyam Community', 'url', 'https://weverse.io/'),

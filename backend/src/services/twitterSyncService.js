@@ -59,6 +59,9 @@ export async function syncTwitterFeed(artistId = null) {
         username,
         eventsAdded,
       });
+
+      // 500ms delay between Twitter API calls
+      await new Promise(r => setTimeout(r, 500));
     }
 
     return { success: true, results: syncResults };

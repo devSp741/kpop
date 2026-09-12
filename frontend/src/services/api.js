@@ -112,6 +112,7 @@ export async function fetchActivityFeed(params = {}) {
   if (params.artistId) query.append('artistId', params.artistId);
   if (params.limit) query.append('limit', params.limit);
   if (params.page) query.append('page', params.page);
+  if (params.offset !== undefined && params.offset !== null) query.append('offset', params.offset);
 
   const queryString = query.toString() ? `?${query.toString()}` : '';
   return request(`/feed${queryString}`, { method: 'GET' }, false);
@@ -130,6 +131,7 @@ export async function fetchFollowingFeed(params = {}) {
   if (params.artistId) query.append('artistId', params.artistId);
   if (params.limit) query.append('limit', params.limit);
   if (params.page) query.append('page', params.page);
+  if (params.offset !== undefined && params.offset !== null) query.append('offset', params.offset);
 
   const queryString = query.toString() ? `?${query.toString()}` : '';
   return request(`/feed${queryString}`, { method: 'GET' }, true);

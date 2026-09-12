@@ -4,6 +4,8 @@ import { syncYouTubeFeed } from './src/services/youtubeSyncService.js';
 import { syncTwitterFeed } from './src/services/twitterSyncService.js';
 import { syncInstagramFeed } from './src/services/instagramSyncService.js';
 import { syncWeverseFeed } from './src/services/weverseSyncService.js';
+import { syncSpotifyFeed } from './src/services/spotifySyncService.js';
+import { syncTikTokFeed } from './src/services/tiktokSyncService.js';
 
 dotenv.config();
 
@@ -20,20 +22,35 @@ app.listen(PORT, () => {
   } else {
     console.log(`[SYNC ACTIVE] Background Social Media Sync is ENABLED (ENABLE_BACKGROUND_SYNC=true). Outbound worker active.`);
 
-    // Initial sync on startup
-    setTimeout(() => {
-      syncInstagramFeed().catch(err => console.error('Initial Instagram sync error:', err.message));
-      syncYouTubeFeed().catch(err => console.error('Initial YouTube sync error:', err.message));
-      syncWeverseFeed().catch(err => console.error('Initial Weverse sync error:', err.message));
-      syncTwitterFeed().catch(err => console.error('Initial Twitter sync error:', err.message));
-    }, 3000);
+    // Helper for staggered execution to prevent IP rate-limiting bursts
+    const runStaggeredSync = async () => {
+      console.log('[SYNC WORKER] Starting scheduled multi-platform feed update...');
+      try {
+        await syncYouTubeFeed().catch(err => console.error('YouTube sync error:', err.message));
+        await new Promise(r => setTimeout(r, 2000));
 
-    // Background auto-sync worker every 30 seconds
-    setInterval(() => {
-      syncInstagramFeed().catch(err => console.error('Background Instagram sync error:', err.message));
-      syncWeverseFeed().catch(err => console.error('Background Weverse sync error:', err.message));
-      syncYouTubeFeed().catch(err => console.error('Background YouTube sync error:', err.message));
-      syncTwitterFeed().catch(err => console.error('Background Twitter sync error:', err.message));
-    }, 30 * 1000);
+        await syncInstagramFeed().catch(err => console.error('Instagram sync error:', err.message));
+        await new Promise(r => setTimeout(r, 2000));
+
+        await syncWeverseFeed().catch(err => console.error('Weverse sync error:', err.message));
+        await new Promise(r => setTimeout(r, 2000));
+
+        await syncTwitterFeed().catch(err => console.error('Twitter sync error:', err.message));
+        await new Promise(r => setTimeout(r, 2000));
+
+        await syncSpotifyFeed().catch(err => console.error('Spotify sync error:', err.message));
+        await new Promise(r => setTimeout(r, 2000));
+
+        await syncTikTokFeed().catch(err => console.error('TikTok sync error:', err.message));
+      } catch (err) {
+        console.error('Multi-platform sync error:', err.message);
+      }
+    };
+
+    // Initial sync on startup (staggered)
+    setTimeout(runStaggeredSync, 5000);
+
+    // Background auto-sync worker every 5 minutes (300 seconds) to prevent rate-limiting/blocking
+    setInterval(runStaggeredSync, 5 * 60 * 1000);
   }
 });

@@ -60,6 +60,9 @@ export async function syncYouTubeFeed(artistId = null) {
         handle: handleName,
         eventsAdded: newEventsCount,
       });
+
+      // 500ms delay between YouTube fetches
+      await new Promise(resolve => setTimeout(resolve, 500));
     }
 
     return { success: true, results: syncResults };

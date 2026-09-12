@@ -46,77 +46,68 @@ export async function syncWeverseFeed(artistId = null) {
       return { success: true, results: [] };
     }
 
-    const rawResults = await Promise.all(
-      artists.map(async (artist) => {
-        let handles = {};
-        try {
-          handles = typeof artist.official_handles === 'string' 
-            ? JSON.parse(artist.official_handles) 
-            : (artist.official_handles || {});
-        } catch (e) {
-          handles = {};
-        }
+    const rawResults = [];
+    for (const artist of artists) {
+      let handles = {};
+      try {
+        handles = typeof artist.official_handles === 'string' 
+          ? JSON.parse(artist.official_handles) 
+          : (artist.official_handles || {});
+      } catch (e) {
+        handles = {};
+      }
 
-        let parentHandles = {};
-        try {
-          parentHandles = typeof artist.parent_official_handles === 'string'
-            ? JSON.parse(artist.parent_official_handles)
-            : (artist.parent_official_handles || {});
-        } catch (e) {
-          parentHandles = {};
-        }
+      let parentHandles = {};
+      try {
+        parentHandles = typeof artist.parent_official_handles === 'string'
+          ? JSON.parse(artist.parent_official_handles)
+          : (artist.parent_official_handles || {});
+      } catch (e) {
+        parentHandles = {};
+      }
 
-        // Dynamically resolve Weverse handle & URL from database hierarchy
-        const weverseData = handles.weverse || parentHandles.weverse || null;
+      // Dynamically resolve Weverse handle & URL from database hierarchy
+      const weverseData = handles.weverse || parentHandles.weverse || null;
 
-        // If artist has no official Weverse community, skip — do NOT create fake events
-        if (!weverseData || !weverseData.url) {
-          return {
-            artistId: artist.id,
-            artistName: artist.name,
-            eventsAdded: 0,
-            skipped: true,
-          };
-        }
+      // If artist has no official Weverse community, skip — do NOT create fake events
+      if (!weverseData || !weverseData.url) {
+        continue;
+      }
 
-        const sourceUrl = weverseData.url;
+      const sourceUrl = weverseData.url;
+      if (!sourceUrl || sourceUrl === '#') {
+        continue;
+      }
 
-        if (!sourceUrl || sourceUrl === '#') {
-          return {
-            artistId: artist.id,
-            artistName: artist.name,
-            eventsAdded: 0,
-          };
-        }
+      // Live Fetch from Public Weverse Community Endpoint
+      const livePosts = await fetchWeversePublicFeed(artist, sourceUrl);
+      let addedCount = 0;
 
-        // Live Fetch from Public Weverse Community Endpoint
-        const livePosts = await fetchWeversePublicFeed(artist, sourceUrl);
-        let addedCount = 0;
-
-        for (const post of livePosts) {
-          const inserted = await insertActivityEvent({
-            artistId: artist.id,
-            platform: 'weverse',
-            eventType: post.type || 'POST',
-            summaryTitle: post.title,
-            thumbnailUrl: artist.avatar_url,
-            sourceUrl: post.sourceUrl || sourceUrl,
-            publishedAt: post.publishedAt || new Date(),
-          });
-
-          if (inserted) addedCount++;
-        }
-
-        return {
+      for (const post of livePosts) {
+        const inserted = await insertActivityEvent({
           artistId: artist.id,
-          artistName: artist.name,
-          eventsAdded: addedCount,
-        };
-      })
-    );
+          platform: 'weverse',
+          eventType: post.type || 'POST',
+          summaryTitle: post.title,
+          thumbnailUrl: artist.avatar_url,
+          sourceUrl: post.sourceUrl || sourceUrl,
+          publishedAt: post.publishedAt || new Date(),
+        });
 
-    const filteredResults = rawResults.filter(Boolean);
-    return { success: true, results: filteredResults };
+        if (inserted) addedCount++;
+      }
+
+      rawResults.push({
+        artistId: artist.id,
+        artistName: artist.name,
+        eventsAdded: addedCount,
+      });
+
+      // 500ms delay between Weverse requests
+      await new Promise(r => setTimeout(r, 500));
+    }
+
+    return { success: true, results: rawResults };
   } catch (error) {
     console.error('Weverse Sync Service Error:', error.message);
     throw error;

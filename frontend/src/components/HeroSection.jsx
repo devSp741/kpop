@@ -73,22 +73,8 @@ const SpotifyIcon = ({ className = "w-5 h-5", colored = false }) => (
   </svg>
 );
 
-const FacebookIcon = ({ className = "w-5 h-5", colored = false }) => (
-  <svg className={className} viewBox="0 0 24 24" fill={colored ? "#1877F2" : "currentColor"}>
-    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-  </svg>
-);
-
-const LogoMark = ({ className = "w-6 h-6" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-  </svg>
-);
-
 const platformBadges = [
   { id: "youtube", name: "YouTube", icon: YouTubeIcon, color: "hsl(0 72% 51%)" },
-  { id: "facebook", name: "Facebook", icon: FacebookIcon, color: "#1877F2" },
   { id: "instagram", name: "Instagram", icon: InstagramIcon, color: "hsl(330 80% 55%)" },
   { id: "tiktok", name: "TikTok", icon: TikTokIcon, color: "#000000" },
   { id: "spotify", name: "Spotify", icon: SpotifyIcon, color: "hsl(141 73% 42%)" },
@@ -100,6 +86,9 @@ export default function HeroSection() {
   const { user, token, openRegisterModal, openLoginModal } = useAuth();
   const [feedItems, setFeedItems] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [loadingMore, setLoadingMore] = React.useState(false);
+  const [page, setPage] = React.useState(1);
+  const [hasMore, setHasMore] = React.useState(true);
   const [activePlatform, setActivePlatform] = React.useState("all");
   const [feedMode, setFeedMode] = React.useState("global"); // 'global' | 'following'
 
@@ -120,38 +109,51 @@ export default function HeroSection() {
     }
   };
 
+  const MAX_FEED_LIMIT = 100;
+  const INITIAL_FEED_LIMIT = 40;
+
   React.useEffect(() => {
     let isMounted = true;
 
-    async function loadFeed(isInitial = false) {
+    async function loadFeed() {
       try {
-        if (isInitial) setLoading(true);
+        setLoading(true);
         let response;
         if (feedMode === "following") {
-          response = await fetchFollowingFeed({ platform: activePlatform, limit: 12 });
+          response = await fetchFollowingFeed({ platform: activePlatform, offset: 0, limit: 40 });
         } else {
-          response = await fetchActivityFeed({ platform: activePlatform, limit: 12 });
+          response = await fetchActivityFeed({ platform: activePlatform, offset: 0, limit: 40 });
         }
 
         if (isMounted && response?.data) {
           setFeedItems(response.data);
+          setHasMore(Boolean(response.pagination?.hasMore));
         }
       } catch (err) {
-        if (isInitial) {
-          console.error("Failed to load live activity feed:", err);
-          if (isMounted) setFeedItems([]);
-        }
+        console.error("Failed to load live activity feed:", err);
+        if (isMounted) setFeedItems([]);
       } finally {
-        if (isMounted && isInitial) setLoading(false);
+        if (isMounted) setLoading(false);
       }
     }
 
-    loadFeed(true);
+    loadFeed();
 
-    // Silent background auto-polling every 15 seconds (bina page refresh ke live data auto-update)
-    const pollInterval = setInterval(() => {
+    // Silent background auto-polling every 15 seconds
+    const pollInterval = setInterval(async () => {
       if (typeof document !== "undefined" && document.visibilityState === "visible") {
-        loadFeed(false);
+        try {
+          let response = feedMode === "following" 
+            ? await fetchFollowingFeed({ platform: activePlatform, offset: 0, limit: 20 })
+            : await fetchActivityFeed({ platform: activePlatform, offset: 0, limit: 20 });
+          if (isMounted && response?.data) {
+            setFeedItems((prev) => {
+              const existingIds = new Set(prev.map(item => item.id));
+              const newItems = response.data.filter(item => !existingIds.has(item.id));
+              return newItems.length > 0 ? [...newItems, ...prev] : prev;
+            });
+          }
+        } catch (e) {}
       }
     }, 15000);
 
@@ -161,13 +163,49 @@ export default function HeroSection() {
     };
   }, [activePlatform, feedMode, user, token]);
 
+  const handleLoadMore = async () => {
+    if (loadingMore || !hasMore) return;
+
+    try {
+      setLoadingMore(true);
+      const currentCount = feedItems.length;
+
+      let response;
+      if (feedMode === "following") {
+        response = await fetchFollowingFeed({ platform: activePlatform, offset: currentCount, limit: 30 });
+      } else {
+        response = await fetchActivityFeed({ platform: activePlatform, offset: currentCount, limit: 30 });
+      }
+
+      if (response?.data && response.data.length > 0) {
+        setFeedItems((prev) => {
+          const existingIds = new Set(prev.map((item) => item.id));
+          const newItems = response.data.filter((item) => !existingIds.has(item.id));
+          return [...prev, ...newItems];
+        });
+        setHasMore(Boolean(response.pagination?.hasMore));
+      } else {
+        setHasMore(false);
+      }
+    } catch (err) {
+      console.error("Failed to load more notifications:", err);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  const handleScroll = (e) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+    if (scrollHeight - scrollTop - clientHeight < 40) {
+      handleLoadMore();
+    }
+  };
+
   const getPlatformMeta = (platformName) => {
     const key = (platformName || "").toLowerCase();
     switch (key) {
       case "youtube":
         return { name: "YouTube", icon: YouTubeIcon, color: "hsl(0 72% 51%)" };
-      case "facebook":
-        return { name: "Facebook", icon: FacebookIcon, color: "#1877F2" };
       case "instagram":
         return { name: "Instagram", icon: InstagramIcon, color: "hsl(330 80% 55%)" };
       case "tiktok":
@@ -366,7 +404,10 @@ export default function HeroSection() {
               <div className="h-px bg-slate-200 mb-3 mx-1" />
 
               {/* Notification Feed Cards Container (Scrollable & Touch-Swipeable to Dismiss) */}
-              <div className="space-y-2 text-left max-h-[380px] sm:max-h-[420px] overflow-y-auto pr-1 touch-pan-y scrollbar-slim">
+              <div 
+                onScroll={handleScroll}
+                className="space-y-2 text-left max-h-[380px] sm:max-h-[420px] overflow-y-auto pr-1 touch-pan-y scrollbar-slim"
+              >
                 {loading ? (
                   <Loader text="Loading live feed..." size="sm" className="py-10" />
                 ) : feedItems.length === 0 ? (
@@ -388,66 +429,81 @@ export default function HeroSection() {
                     )}
                   </div>
                 ) : (
-                  <AnimatePresence mode="popLayout">
-                    {feedItems.map((item, idx) => {
-                      const meta = getPlatformMeta(item.platform);
-                      const IconComp = meta.icon || LogoMark;
-                      const artistName = item.artistName || item.artist_name;
-                      const summaryTitle = item.summaryTitle || item.summary_title;
-                      const bodyText = artistName ? `${artistName}: ${summaryTitle}` : summaryTitle;
-                      const publishedTime = item.publishedAt || item.published_at;
-                      const timeText = publishedTime ? formatTimeAgo(publishedTime) : "Just now";
-                      const sourceUrl = item.sourceUrl || item.source_url || "#";
-                      const itemId = item.id || `feed-item-${idx}`;
+                  <>
+                    <AnimatePresence mode="popLayout">
+                      {feedItems.map((item, idx) => {
+                        const meta = getPlatformMeta(item.platform);
+                        const IconComp = meta.icon || LogoMark;
+                        const artistName = item.artistName || item.artist_name;
+                        const summaryTitle = item.summaryTitle || item.summary_title;
+                        const bodyText = artistName ? `${artistName}: ${summaryTitle}` : summaryTitle;
+                        const publishedTime = item.publishedAt || item.published_at;
+                        const timeText = publishedTime ? formatTimeAgo(publishedTime) : "Just now";
+                        const sourceUrl = item.sourceUrl || item.source_url || "#";
+                        const itemId = item.id || `feed-item-${idx}`;
 
-                      return (
-                        <motion.div
-                          key={itemId}
-                          layout
-                          initial={{ opacity: 0, y: 12, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
-                          exit={{ opacity: 0, x: 250, scale: 0.8 }}
-                          transition={{ duration: 0.25 }}
-                          drag="x"
-                          dragConstraints={{ left: 0, right: 0 }}
-                          dragElastic={0.6}
-                          onDragEnd={(e, info) => {
-                            // Swipe left or right by > 75px to dismiss notification card
-                            if (Math.abs(info.offset.x) > 75) {
-                              handleDismissItem(item.id);
-                            }
-                          }}
-                          onClick={() => {
-                            if (sourceUrl && sourceUrl !== "#") {
-                              window.open(sourceUrl, "_blank", "noopener,noreferrer");
-                            }
-                          }}
-                          className="flex items-center gap-2.5 p-2 sm:p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/90 border border-slate-200/80 shadow-xs cursor-grab active:cursor-grabbing select-none transition-colors group relative touch-pan-y"
-                          title="Click to open or swipe left/right to dismiss"
-                        >
-                          <div
-                            className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 pointer-events-none"
-                            style={{ backgroundColor: meta.color }}
+                        return (
+                          <motion.div
+                            key={itemId}
+                            layout
+                            initial={{ opacity: 0, y: 12, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
+                            exit={{ opacity: 0, x: 250, scale: 0.8 }}
+                            transition={{ duration: 0.25 }}
+                            drag="x"
+                            dragConstraints={{ left: 0, right: 0 }}
+                            dragElastic={0.6}
+                            onDragEnd={(e, info) => {
+                              // Swipe left or right by > 75px to dismiss notification card
+                              if (Math.abs(info.offset.x) > 75) {
+                                handleDismissItem(item.id);
+                              }
+                            }}
+                            onClick={() => {
+                              if (sourceUrl && sourceUrl !== "#") {
+                                window.open(sourceUrl, "_blank", "noopener,noreferrer");
+                              }
+                            }}
+                            className="flex items-center gap-2.5 p-2 sm:p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/90 border border-slate-200/80 shadow-xs cursor-grab active:cursor-grabbing select-none transition-colors group relative touch-pan-y"
+                            title="Click to open or swipe left/right to dismiss"
                           >
-                            <IconComp className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white" />
-                          </div>
-                          <div className="flex-1 min-w-0 pointer-events-none">
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "#0f172a" }}>
-                                {meta.name}
-                              </span>
-                              <span className="text-[10px] shrink-0" style={{ color: "#94a3b8" }}>
-                                {timeText}
-                              </span>
+                            <div
+                              className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 pointer-events-none"
+                              style={{ backgroundColor: meta.color }}
+                            >
+                              <IconComp className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white" />
                             </div>
-                            <p className="text-[10.5px] sm:text-[11px] mt-0.5 truncate font-medium" style={{ color: "#475569" }}>
-                              {bodyText}
-                            </p>
-                          </div>
-                        </motion.div>
-                      );
-                    })}
-                  </AnimatePresence>
+                            <div className="flex-1 min-w-0 pointer-events-none">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "#0f172a" }}>
+                                  {meta.name}
+                                </span>
+                                <span className="text-[10px] shrink-0" style={{ color: "#94a3b8" }}>
+                                  {timeText}
+                                </span>
+                              </div>
+                              <p className="text-[10.5px] sm:text-[11px] mt-0.5 truncate font-medium" style={{ color: "#475569" }}>
+                                {bodyText}
+                              </p>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </AnimatePresence>
+
+                    {loadingMore && (
+                      <div className="py-2.5 text-center flex items-center justify-center gap-2 text-slate-500">
+                        <div className="w-3.5 h-3.5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                        <span className="text-[10.5px] font-medium">Loading older updates...</span>
+                      </div>
+                    )}
+
+                    {!hasMore && feedItems.length > 0 && (
+                      <div className="py-2.5 text-center">
+                        <span className="text-[10px] font-medium text-slate-400">All caught up! No older updates.</span>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -464,11 +520,11 @@ export default function HeroSection() {
           className="flex flex-wrap items-center justify-center gap-5 sm:gap-8 mt-10 mb-16 relative z-10 max-w-[290px] sm:max-w-none mx-auto"
         >
           <YouTubeIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
-          <FacebookIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
           <InstagramIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
+          <TikTokIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
+          <SpotifyIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
           <WeverseIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
           <XIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
-          <SpotifyIcon className="w-7 sm:w-8 h-7 sm:h-8 hover:scale-110 transition-transform cursor-pointer" colored />
         </motion.div>
       </section>
     </div>

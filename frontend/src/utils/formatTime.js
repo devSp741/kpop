@@ -5,12 +5,23 @@
 export function formatTimeAgo(dateString) {
   if (!dateString) return 'Just now';
 
-  const date = new Date(dateString);
+  // Handle MySQL DATETIME 'YYYY-MM-DD HH:MM:SS' strings gracefully
+  const isoStr = typeof dateString === 'string' && dateString.includes(' ') && !dateString.includes('T')
+    ? dateString.replace(' ', 'T')
+    : dateString;
+
+  const date = new Date(isoStr);
+  if (isNaN(date.getTime())) return 'Just now';
+
   const now = new Date();
-  const secondsPast = Math.floor((now.getTime() - date.getTime()) / 1000);
+  let secondsPast = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  if (secondsPast < 0) {
+    secondsPast = 0;
+  }
 
   if (secondsPast < 60) {
-    return `${Math.max(1, secondsPast)}s ago`;
+    return secondsPast <= 10 ? 'Just now' : `${secondsPast}s ago`;
   }
   if (secondsPast < 3600) {
     return `${Math.floor(secondsPast / 60)}m ago`;

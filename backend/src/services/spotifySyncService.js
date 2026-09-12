@@ -77,48 +77,49 @@ export async function syncSpotifyFeed(artistId = null) {
     const [artists] = await pool.query(query, queryParams);
     const token = await getSpotifyAccessToken();
 
-    const rawResults = await Promise.all(
-      artists.map(async (artist) => {
-        let handles = {};
-        try {
-          handles = typeof artist.official_handles === 'string' 
-            ? JSON.parse(artist.official_handles) 
-            : (artist.official_handles || {});
-        } catch (e) {
-          handles = {};
-        }
+    const rawResults = [];
+    for (const artist of artists) {
+      let handles = {};
+      try {
+        handles = typeof artist.official_handles === 'string' 
+          ? JSON.parse(artist.official_handles) 
+          : (artist.official_handles || {});
+      } catch (e) {
+        handles = {};
+      }
 
-        const spotifyData = handles.spotify;
-        if (!spotifyData) return null;
+      const spotifyData = handles.spotify;
+      if (!spotifyData) continue;
 
-        const spotifyUrl = spotifyData.url || '';
-        let spotifyId = null;
+      const spotifyUrl = spotifyData.url || '';
+      let spotifyId = null;
 
-        const match = spotifyUrl.match(/\/artist\/([a-zA-Z0-9]+)/);
-        if (match) {
-          spotifyId = match[1];
-        }
+      const match = spotifyUrl.match(/\/artist\/([a-zA-Z0-9]+)/);
+      if (match) {
+        spotifyId = match[1];
+      }
 
-        let newEventsCount = 0;
+      let newEventsCount = 0;
 
-        if (token) {
-          newEventsCount = await fetchViaSpotifyApi(artist.id, artist.name, spotifyId, token, spotifyUrl);
-        } else {
-          newEventsCount = await fetchViaSpotifyFallback(artist.id, artist.name, spotifyUrl, spotifyId);
-        }
+      if (token) {
+        newEventsCount = await fetchViaSpotifyApi(artist.id, artist.name, spotifyId, token, spotifyUrl);
+      } else {
+        newEventsCount = await fetchViaSpotifyFallback(artist.id, artist.name, spotifyUrl, spotifyId);
+      }
 
-        return {
-          artistId: artist.id,
-          artistName: artist.name,
-          spotifyId: spotifyId || 'N/A',
-          eventsAdded: newEventsCount,
-          mode: token ? 'API' : 'FALLBACK',
-        };
-      })
-    );
+      rawResults.push({
+        artistId: artist.id,
+        artistName: artist.name,
+        spotifyId: spotifyId || 'N/A',
+        eventsAdded: newEventsCount,
+        mode: token ? 'API' : 'FALLBACK',
+      });
 
-    const filteredResults = rawResults.filter(Boolean);
-    return { success: true, results: filteredResults };
+      // 500ms delay between Spotify fetches
+      await new Promise(r => setTimeout(r, 500));
+    }
+
+    return { success: true, results: rawResults };
   } catch (error) {
     console.error('Spotify Sync Service Error:', error.message);
     throw error;

@@ -1,25 +1,12 @@
 import pool from '../config/db.js';
 
-export const getActivityFeed = async ({ platform, artistId, userId, followedOnly, page = 1, limit = 20 }) => {
-  const offset = (page - 1) * limit;
+export const getActivityFeed = async ({ platform, artistId, userId, followedOnly, page = 1, limit = 40, offset: customOffset }) => {
+  const pageNum = Math.max(1, Number(page) || 1);
+  const limitNum = Math.min(50, Math.max(1, Number(limit) || 40));
+  const offset = customOffset !== undefined && customOffset !== null ? Number(customOffset) : (pageNum - 1) * limitNum;
 
-  let query = `
-    SELECT 
-      e.id, 
-      e.artist_id as artistId, 
-      a.slug as artistSlug, 
-      a.name as artistName, 
-      a.group_name as groupName, 
-      a.avatar_url as artistAvatar, 
-      e.platform, 
-      e.event_type as eventType, 
-      e.summary_title as summaryTitle, 
-      e.thumbnail_url as thumbnailUrl, 
-      e.source_url as sourceUrl, 
-      e.published_at as publishedAt
-    FROM activity_events e
-    JOIN artists a ON e.artist_id = a.id
-  `;
+  // Maximum allowed scroll threshold managed directly by Database API engine
+  const MAX_ALLOWED_ITEMS = 100;
 
   const queryParams = [];
   const whereClauses = [];
@@ -51,15 +38,69 @@ export const getActivityFeed = async ({ platform, artistId, userId, followedOnly
     queryParams.push(userId);
   }
 
-  if (whereClauses.length > 0) {
-    query += ` WHERE ` + whereClauses.join(' AND ');
+  const whereSql = whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : '';
+
+  // Get total count from DB
+  const countQuery = `
+    SELECT COUNT(*) as total
+    FROM activity_events e
+    JOIN artists a ON e.artist_id = a.id
+    ${whereSql}
+  `;
+  const [countRows] = await pool.query(countQuery, queryParams);
+  const rawTotal = countRows[0]?.total || 0;
+  const total = Math.min(rawTotal, MAX_ALLOWED_ITEMS);
+
+  if (offset >= total) {
+    return {
+      events: [],
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        totalPages: Math.ceil(total / limitNum),
+        hasMore: false,
+      },
+    };
   }
 
-  query += ` ORDER BY e.published_at DESC LIMIT ? OFFSET ?`;
-  queryParams.push(Number(limit), Number(offset));
+  const effectiveLimit = Math.min(limitNum, MAX_ALLOWED_ITEMS - offset);
 
-  const [rows] = await pool.query(query, queryParams);
-  return rows;
+  const query = `
+    SELECT 
+      e.id, 
+      e.artist_id as artistId, 
+      a.slug as artistSlug, 
+      a.name as artistName, 
+      a.group_name as groupName, 
+      a.avatar_url as artistAvatar, 
+      e.platform, 
+      e.event_type as eventType, 
+      e.summary_title as summaryTitle, 
+      e.thumbnail_url as thumbnailUrl, 
+      e.source_url as sourceUrl, 
+      e.published_at as publishedAt
+    FROM activity_events e
+    JOIN artists a ON e.artist_id = a.id
+    ${whereSql}
+    ORDER BY e.published_at DESC
+    LIMIT ? OFFSET ?
+  `;
+  const dataQueryParams = [...queryParams, effectiveLimit, offset];
+
+  const [rows] = await pool.query(query, dataQueryParams);
+  const hasMore = offset + rows.length < total;
+
+  return {
+    events: rows,
+    pagination: {
+      page: pageNum,
+      limit: limitNum,
+      total,
+      totalPages: Math.ceil(total / limitNum),
+      hasMore,
+    },
+  };
 };
 
 /**
